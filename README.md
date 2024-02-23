@@ -1,2 +1,2 @@
-# After downloading
+# After downloading/cloning/pulling
 npm install
