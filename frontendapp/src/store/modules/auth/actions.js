@@ -1,4 +1,4 @@
-import { SIGNUP_ACTION } from "@/store/storeconstants";
+import { SET_USER_TOKEN_DATA_MUTATION, SIGNUP_ACTION } from "@/store/storeconstants";
 import Axios from 'axios';
 
 
@@ -6,7 +6,7 @@ import Axios from 'axios';
 //firebase muna database nito
 
 export default {
-    async [SIGNUP_ACTION](_, payload) {
+    async [SIGNUP_ACTION](context, payload) {
         let postData = {
             email: payload.email,
             password: payload.password,
@@ -17,7 +17,15 @@ export default {
         , 
         postData,
         );
-        console.log(response)
+        if (response.status === 200){
+            context.commit(SET_USER_TOKEN_DATA_MUTATION, {
+                email: response.data.email,
+                token: response.data.idToken,
+                expiresIn: response.data.expiresIn,
+                refreshToken: response.data.refreshToken,
+                userId: response.data.localId,
+            })
+        }
     },
 };
 
