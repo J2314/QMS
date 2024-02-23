@@ -1,0 +1,2 @@
+# After downloading
+npm install
