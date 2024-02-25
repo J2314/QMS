@@ -6,15 +6,17 @@
       </div>
       <h1 class="page-title">BMA E-QMS</h1>
       <p class="login-label">Login</p>
+      <div class="alert alert-danger" v-if="error">{{ error }}</div>
       <form class="login-form" @submit.prevent="onLogin()">
         <div class="form-group">
           <label for="email" class="form-label">Email</label>
-          <input type="email" id="email" placeholder="Enter your email" class="input-field" v-model="email">
+          <input type="email" id="email" placeholder="Enter your email" class="input-field" v-model.trim="email">
           <div class="error" v-if="errors.email">{{ errors.email }}</div>
         </div>
         <div class="form-group">
           <label for="password" class="form-label">Password</label>
-          <input type="password" id="password" placeholder="Enter your password" class="input-field" v-model="password">
+          <input type="password" id="password" placeholder="Enter your password" class="input-field"
+            v-model.trim="password">
           <div class="error" v-if="errors.password">{{ errors.password }}</div>
         </div>
         <div class="additional-options">
@@ -34,31 +36,58 @@
 
   
 <script>
-
-import SignupValidations from '../services/SignupValidations'
+import { mapActions, mapMutations } from 'vuex';
+import SignupValidations from '../services/SignupValidations';
+import {
+  LOADING_SPINNER_SHOW_MUTATION,
+  LOGIN_ACTION,
+} from '../store/storeconstants';
 export default {
-  data(){
-    return{
+  name: 'LoginPage',
+  data() {
+    return {
       email: '',
       password: '',
       errors: [],
-    }
+      error: '',
+    };
   },
   methods: {
-    onLogin() {
+    ...mapActions('auth', {
+      login: LOGIN_ACTION,
+    }),
+    ...mapMutations({
+      showLoading: LOADING_SPINNER_SHOW_MUTATION,
+    }),
+    async onLogin() {
       let validations = new SignupValidations(
-        this.email, 
+        this.email,
         this.password,
-        );
-        this.errors = validations.checkValidations();
-        if (this.errors.length) {
-          return false;
-        }
-        //signup registration
+      );
+
+      this.errors = validations.checkValidations();
+      if (this.errors.length) {
+        return false;
+      }
+      this.error = '';
+
+      this.showLoading(true);
+      //Login check
+      try {
+        await this.login({
+          email: this.email,
+          password: this.password,
+        });
+        this.$router.push('/dashboard');
+      } catch (e) {
+        this.error = e;
+        this.showLoading(false);
+      }
+      this.showLoading(false);
+
     },
   },
-  name: 'LoginPage'
-}
+};
 </script>
 
   
@@ -75,7 +104,7 @@ export default {
   border-radius: 15px;
   box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
   padding: 30px;
-  width: 400px; 
+  width: 400px;
   background-color: #fff;
 }
 
@@ -123,7 +152,7 @@ export default {
 
 .input-field {
   padding: 12px;
-  width: calc(100% - 24px);
+  width: 100%;
   border: 2px solid #4CAF50;
   border-radius: 8px;
   font-size: 16px;

@@ -6,6 +6,7 @@
       </div>
       <h1 class="page-title">BMA E-QMS</h1>
       <p class="signup-label">Sign Up</p>
+      <div class="alert alert-danger" v-if="error">{{ error }}</div>
       <form class="signup-form" @submit.prevent="onSignup">
         <div class="form-group">
           <label for="email" class="form-label">Email</label>
@@ -28,8 +29,8 @@
 
 <script>
 import SignupValidations from '@/services/SignupValidations';
-import {mapActions} from 'vuex';
-import {SIGNUP_ACTION} from '../store/storeconstants'
+import {mapActions, mapMutations} from 'vuex';
+import {LOADING_SPINNER_SHOW_MUTATION, SIGNUP_ACTION} from '../store/storeconstants'
 export default {
   name: 'SignupPage',
   data() {
@@ -37,13 +38,18 @@ export default {
       email: '',
       password: '',
       errors: [],
+      error: '',
     };
   },
   methods: {
     ...mapActions('auth', {
       signup: SIGNUP_ACTION,
     }),
-    onSignup() {
+
+    ...mapMutations({
+      showLoading: LOADING_SPINNER_SHOW_MUTATION
+    }),
+    async onSignup() {
       let validations = new SignupValidations(
           this.email, 
           this.password,
@@ -52,8 +58,14 @@ export default {
           if ('email' in this.errors || 'password' in this.errors) {
             return false;
           }
-          //signup registration
-          this.signup({email: this.email, password: this.password});
+
+          this.showLoading(true);
+
+          await this.signup({email: this.email, password: this.password}).catch(error => {
+           this.error = error;
+           this.showLoading(false);
+          });
+          this.showLoading(false);
     }
   }
 }
@@ -120,7 +132,7 @@ export default {
 
 .input-field {
   padding: 12px;
-  width: calc(100% - 24px);
+  width: 100%;
   border: 2px solid #4CAF50;
   border-radius: 8px;
   font-size: 16px;
