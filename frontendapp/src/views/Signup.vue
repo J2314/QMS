@@ -7,7 +7,7 @@
       <h1 class="page-title">BMA E-QMS</h1>
       <p class="signup-label">Sign Up</p>
       <div class="alert alert-danger" v-if="error">{{ error }}</div>
-      <form class="signup-form" @submit.prevent="onSignup">
+      <form class="signup-form" @submit.prevent="registerUser">
         <div class="form-group">
           <label for="email" class="form-label">Email</label>
           <input v-model.trim="email" type="email" id="email" placeholder="Enter your email" class="input-field">
@@ -28,9 +28,12 @@
 </template>
 
 <script>
-import SignupValidations from '@/services/SignupValidations';
-import {mapActions, mapMutations} from 'vuex';
-import {LOADING_SPINNER_SHOW_MUTATION, SIGNUP_ACTION} from '../store/storeconstants'
+
+import {mapMutations} from 'vuex';
+import {LOADING_SPINNER_SHOW_MUTATION} from '../store/storeconstants'
+
+import axios from 'axios'
+
 export default {
   name: 'SignupPage',
   data() {
@@ -42,31 +45,35 @@ export default {
     };
   },
   methods: {
-    ...mapActions('auth', {
-      signup: SIGNUP_ACTION,
-    }),
-
     ...mapMutations({
       showLoading: LOADING_SPINNER_SHOW_MUTATION
     }),
-    async onSignup() {
-      let validations = new SignupValidations(
-          this.email, 
-          this.password,
-          );
-          this.errors = validations.checkValidations();
-          if ('email' in this.errors || 'password' in this.errors) {
-            return false;
-          }
+    async registerUser() {
+  try {
+    this.showLoading(true);
 
-          this.showLoading(true);
+    await axios.post('http://127.0.0.1:8000/api/register', {
+      email: this.email,
+      password: this.password
+    });
 
-          await this.signup({email: this.email, password: this.password}).catch(error => {
-           this.error = error;
-           this.showLoading(false);
-          });
-          this.showLoading(false);
-    }
+    this.error = '';
+    this.errors = [];
+
+    this.email = '';
+    this.password = '';
+
+    this.showLoading(false);
+
+    alert('User registered successfully!');
+  } catch (error) {
+    this.error = error?.response?.data?.message || 'An error occurred while registering the user.';
+    this.errors = [];
+
+    this.showLoading(false);
+  }
+},
+  
   }
 }
 </script>

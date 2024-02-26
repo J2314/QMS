@@ -36,12 +36,11 @@
 
   
 <script>
-import { mapActions, mapMutations } from 'vuex';
+import { mapMutations } from 'vuex';
 import SignupValidations from '../services/SignupValidations';
-import {
-  LOADING_SPINNER_SHOW_MUTATION,
-  LOGIN_ACTION,
-} from '../store/storeconstants';
+import { LOADING_SPINNER_SHOW_MUTATION } from '../store/storeconstants';
+import axios from 'axios';
+
 export default {
   name: 'LoginPage',
   data() {
@@ -53,9 +52,6 @@ export default {
     };
   },
   methods: {
-    ...mapActions('auth', {
-      login: LOGIN_ACTION,
-    }),
     ...mapMutations({
       showLoading: LOADING_SPINNER_SHOW_MUTATION,
     }),
@@ -72,23 +68,25 @@ export default {
       this.error = '';
 
       this.showLoading(true);
-      //Login check
       try {
-        await this.login({
+        await axios.post('http://127.0.0.1:8000/api/login', {
           email: this.email,
           password: this.password,
         });
         this.$router.push('/dashboard');
-      } catch (e) {
-        this.error = e;
-        this.showLoading(false);
+      } catch (error) {
+        if (error.response && error.response.data && error.response.data.message) {
+          this.error = error.response.data.message;
+        } else {
+          this.error = 'An error occurred while logging in.';
+        }
       }
       this.showLoading(false);
-
     },
   },
 };
 </script>
+
 
   
 <style scoped>
