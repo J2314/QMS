@@ -3,23 +3,28 @@
     <Navbar/>
     <div class="sidebar">
       <ul class="list-unstyled">
-        <li><router-link to="/dashboard">General</router-link></li>
+        <li><router-link to="/dashboard">Dashboard</router-link></li>
+        <li><router-link to="/general">General</router-link></li>
         <li>
           <a href="#" @click="toggleDepartments">Departments <span v-if="showDepartments" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
-          <ul v-if="showDepartments" class="list-unstyled">
+          <ul v-show="showDepartments" class="list-unstyled">
             <li><router-link to="/it-department">IT Department</router-link></li>
             <li><router-link to="/accounting-department">Accounting Department</router-link></li>
             <li><router-link to="/registrar-office">Registrar's Office</router-link></li>
             <li><router-link to="/school-director">School Director's Office</router-link></li>
             <li><router-link to="/academic-heads">Academic Heads</router-link></li>
             <li><router-link to="/faculty">Faculty</router-link></li>
-            <!-- Add more departments as needed -->
           </ul>
         </li>
       </ul>
     </div>
     <div class="logout-section">
       <a href="#" @click="logout">Logout</a>
+    </div>
+    <div class="statistics">
+      <h2>Basic Statistics</h2>
+      <p>Total Users: {{ totalUsers }}</p>
+      <p>Total Departments: {{ totalDepartments }}</p>
     </div>
   </div>
 </template>
@@ -33,7 +38,9 @@ export default {
   },
   data() {
     return {
-      showDepartments: false
+      showDepartments: false,
+      totalUsers: 100, // Example data for total users
+      totalDepartments: 6 // Example data for total departments
     };
   },
   methods: {
@@ -78,14 +85,14 @@ export default {
   text-decoration: none;
   padding: 10px 20px;
   display: block;
-  transition: all 0.3s ease; /* Updated transition property */
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Updated font-family */
+  transition: all 0.3s ease; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
 }
 
 .sidebar a:hover {
   background-color: rgba(255, 255, 255, 0.1);
   text-decoration: none;
-  color: #ffd700; /* Change text color on hover */
+  color: #ffd700; 
 }
 
 .logout-section {
@@ -101,26 +108,25 @@ export default {
   display: block;
   border: 1px solid #fff;
   border-radius: 5px;
-  transition: all 0.3s ease; /* Updated transition property */
+  transition: all 0.3s ease; 
 }
 
 .logout-section a:hover {
   background-color: rgba(255, 255, 255, 0.1);
   text-decoration: none;
-  color: #ffd700; /* Change text color on hover */
+  color: #ffd700; 
 }
 
-.sidebar ul ul {
-  display: none; /* Hide dropdown by default */
-  padding-left: 20px;
-  background-color: #444; /* Background color for dropdown */
-}
-
-.sidebar ul li:hover ul {
-  display: block; /* Show dropdown on hover */
+.statistics {
+  position: fixed;
+  top: 70px; /* Adjust the top value to position it below the navbar */
+  right: 20px; /* Adjust the right value to position it where you want */
+  background-color: #444;
+  color: #fff;
+  padding: 20px;
 }
 
 .arrow {
-  float: right; /* Align the arrow to the right */
+  float: right; 
 }
 </style>

@@ -66,7 +66,6 @@ export default {
         return false;
       }
       this.error = '';
-
       this.showLoading(true);
       try {
         await axios.post('http://127.0.0.1:8000/api/login', {
@@ -87,8 +86,6 @@ export default {
 };
 </script>
 
-
-  
 <style scoped>
 .login-page {
   margin-top: 1.5%;
