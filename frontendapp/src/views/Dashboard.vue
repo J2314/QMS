@@ -21,11 +21,6 @@
     <div class="logout-section">
       <a href="#" @click="logout">Logout</a>
     </div>
-    <div class="statistics">
-      <h2>Basic Statistics</h2>
-      <p>Total Users: {{ totalUsers }}</p>
-      <p>Total Departments: {{ totalDepartments }}</p>
-    </div>
   </div>
 </template>
 
@@ -38,9 +33,7 @@ export default {
   },
   data() {
     return {
-      showDepartments: false,
-      totalUsers: 100, // Example data for total users
-      totalDepartments: 6 // Example data for total departments
+      showDepartments: false
     };
   },
   methods: {
@@ -115,15 +108,6 @@ export default {
   background-color: rgba(255, 255, 255, 0.1);
   text-decoration: none;
   color: #ffd700; 
-}
-
-.statistics {
-  position: fixed;
-  top: 70px; /* Adjust the top value to position it below the navbar */
-  right: 20px; /* Adjust the right value to position it where you want */
-  background-color: #444;
-  color: #fff;
-  padding: 20px;
 }
 
 .arrow {
