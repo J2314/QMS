@@ -10,7 +10,7 @@
     </button>
     <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
       <div class="navbar-nav">
-        <a class="nav-link active" aria-current="page" href="#">User</a>
+        <a class="nav-link active" aria-current="page" href="#">Admin</a>
       </div>
     </div>
   </nav>
