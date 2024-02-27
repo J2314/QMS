@@ -2,7 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router';
 import Login from '../views/Login.vue';
 import SignUp from '../views/Signup.vue';
 import Dashboard from '../views/Dashboard.vue'
-import General from '../views/General.vue'
+import addDepartment from '../views/AddDepartment.vue'
+import addForm from '../views/AddForm.vue'
 
 const routes = [
   {
@@ -21,9 +22,14 @@ const routes = [
     component: Dashboard
   },
   {
-    path: '/general',
-    name: 'General',
-    component: General
+    path: '/addDepartment',
+    name: 'addDepartment',
+    component: addDepartment
+  },
+  {
+    path: '/addForm',
+    name: 'addForm',
+    component: addForm
   }
 ];
 
