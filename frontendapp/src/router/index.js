@@ -4,6 +4,7 @@ import SignUp from '../views/Signup.vue';
 import Dashboard from '../views/Dashboard.vue'
 import addDepartment from '../views/AddDepartment.vue'
 import addForm from '../views/AddForm.vue'
+import Statistics from '../components/TheStats.vue'
 
 const routes = [
   {
@@ -30,6 +31,11 @@ const routes = [
     path: '/addForm',
     name: 'addForm',
     component: addForm
+  },
+  {
+    path: '/statistics',
+    name: 'Statistics',
+    component: Statistics
   }
 ];
 

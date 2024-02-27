@@ -77,16 +77,16 @@ export default {
 }
 
 .form-label {
-    font-size: 18px; /* Increased font size */
+    font-size: 18px; 
     color: #333;
-    margin-bottom: 10px; /* Increased margin bottom */
+    margin-bottom: 10px; 
 }
 
 .form-control {
     width: 100%;
-    padding: 12px; /* Increased padding */
+    padding: 12px; 
     border: 1px solid #ccc;
-    border-radius: 6px; /* Increased border radius */
+    border-radius: 6px;
     font-size: 16px;
 }
 
@@ -94,8 +94,8 @@ export default {
     background-color: #007bff;
     color: #fff;
     border: none;
-    border-radius: 6px; /* Increased border radius */
-    padding: 12px 20px; /* Increased padding */
+    border-radius: 6px; 
+    padding: 12px 20px;
     cursor: pointer;
     transition: background-color 0.3s;
     font-size: 16px;
@@ -108,8 +108,8 @@ export default {
 .success-message,
 .error-message {
     display: block;
-    margin-top: 12px; /* Increased margin top */
-    font-size: 16px; /* Increased font size */
+    margin-top: 12px; 
+    font-size: 16px; 
     color: #28a745;
 }
 
@@ -118,9 +118,9 @@ export default {
 }
 
 .form-title {
-    font-size: 32px; /* Increased font size */
+    font-size: 32px; 
     font-weight: bold;
     color: #333;
-    margin-bottom: 30px; /* Increased margin bottom */
+    margin-bottom: 30px; 
 }
 </style>
