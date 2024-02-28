@@ -2,7 +2,7 @@
   <div>
     <div class="content-wrapper">
       <form @submit.prevent="submitForm" class="add-form">
-        <h1 class="form-title">Forms</h1>
+        <h1 class="form-title">Add Forms</h1>
         <div class="form-table-container">
           <table class="form-table">
             <tr>
@@ -92,7 +92,6 @@ export default {
       }, 1000);
     },
     deleteDepartment(index) {
-      // Remove department from departments array
       this.departments.splice(index, 1);
     }
   }
@@ -102,6 +101,7 @@ export default {
 <style scoped>
 .content-wrapper {
   padding: 20px;
+  margin-top: 60px; /* Adjust the top margin to make space for the fixed navbar */
 }
 
 .add-form {

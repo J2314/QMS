@@ -87,7 +87,7 @@ export default {
 }
 
 .container div {
-  flex: 0 1 45%; /* Adjust the width as needed */
+  flex: 0 1 45%; 
   margin-bottom: 20px;
 }
 </style>

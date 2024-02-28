@@ -6,7 +6,7 @@ import AddDepartment from '../views/AddDepartment.vue';
 import AddForm from '../views/AddForm.vue';
 import Statistics from '../components/TheStats.vue'
 import Announcement from '../components/Announcement.vue';
-import Administration from '../components/Administration.vue';
+import Monitoring from '../components/Monitoring.vue';
 import Calendar from '../components/Calendar.vue';
 
 const routes = [
@@ -36,9 +36,9 @@ const routes = [
         component: Announcement
       },
       {
-        path: 'administration',
-        name: 'Administration',
-        component: Administration
+        path: 'monitoring',
+        name: 'Monitoring',
+        component: Monitoring
       },
       {
         path: 'calendar',

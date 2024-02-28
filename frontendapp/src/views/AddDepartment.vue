@@ -95,6 +95,7 @@
   <style scoped>
   .content-wrapper {
     padding: 20px;
+    margin-top: 60px; /* Adjusted margin to make space for the fixed navbar */
   }
   
   .add-form {

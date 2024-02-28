@@ -10,7 +10,7 @@
             <router-link to="/dashboard/announcements" class="navbar-link">Announcements</router-link>
           </div>
           <div class="col">
-            <router-link to="/dashboard/administration" class="navbar-link">Administration</router-link>
+            <router-link to="/dashboard/monitoring" class="navbar-link">Monitoring</router-link>
           </div>
           <div class="col">
             <router-link to="/dashboard/calendar" class="navbar-link">Calendar</router-link>
@@ -25,7 +25,6 @@
 export default {
   computed: {
     isAddFormOrDepartmentRoute() {
-      // Check if the current route is either AddForm or AddDepartment
       return this.$route.name === 'addForm' || this.$route.name === 'addDepartment';
     }
   }
@@ -36,7 +35,7 @@ export default {
 .additional-navbar {
   background-color: #087f23; 
   padding: 25px; 
-  margin-top: 30px; 
+  margin-top: 6%; 
   margin-right: 15%; 
   margin-left: 20%; 
   border-radius: 20px; 
