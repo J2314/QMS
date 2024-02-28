@@ -14,7 +14,7 @@ class FormRegistration extends Controller
             'file_code' => 'required|string',
             'department_id' => 'required|numeric|exists:departments,id',
         ]);
-
+    
         $formData = new Forms();
         $formData->file_name = $validatedData['file_name'];
         $formData->file_code = $validatedData['file_code'];
@@ -22,6 +22,5 @@ class FormRegistration extends Controller
         $formData->is_removed = false; 
         $formData->save();
         
-        return redirect()->back()->with('success', 'Form submitted successfully!');
-    }
+        return response()->json(['message' => 'Form submitted successfully']);
 }

@@ -8,6 +8,7 @@ use App\Http\Controllers\UserLogin;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\DepartmentRetrieve;
 use App\Http\Controllers\FormRegistration;
+use App\Http\Controllers\FormRetrieve;
 
 /*
 |--------------------------------------------------------------------------
@@ -43,3 +44,6 @@ Route::get('/retrieve', [DepartmentRetrieve::class, 'getDepartments']);
 
 // Add forms
 Route::post('/form', [FormRegistration::class, 'submitForm']);
+
+// Retrive forms
+Route::get('/retrieve-forms', [FormRetrieve::class, 'getForms']);

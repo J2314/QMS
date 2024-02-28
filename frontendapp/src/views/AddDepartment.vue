@@ -55,7 +55,7 @@ export default {
       departmentCode: '',
       submitError: '',
       departments: [], 
-      is_Active: true // Set is_Active to true by default
+      is_Active: true 
     };
   },
   methods: {
