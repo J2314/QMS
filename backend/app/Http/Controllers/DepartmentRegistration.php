@@ -19,6 +19,7 @@ class DepartmentRegistration extends Controller
     
             $department->name = $validatedData['name'];
             $department->code = $validatedData['code']; 
+            $department->is_Active = true; 
     
             $department->save();
     

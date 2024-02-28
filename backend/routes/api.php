@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserReg;
 use App\Http\Controllers\UserLogin;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\DepartmentRetrieve;
 
 
 /*
@@ -36,3 +37,6 @@ Route::get('/submitted-files', [FileController::class, 'submittedFiles']);
 
 //Add department
 Route::post('/department', [DepartmentRegistration::class, 'addDepartment']);
+
+//Retrive department
+Route::get('/retrieve', [DepartmentRetrieve::class, 'getDepartments']);

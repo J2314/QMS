@@ -55,6 +55,7 @@ export default {
       departmentCode: '',
       submitError: '',
       departments: [], 
+      is_Active: true // Set is_Active to true by default
     };
   },
   methods: {
@@ -66,12 +67,14 @@ export default {
 
       axios.post('http://127.0.0.1:8000/api/department', {
         name: this.departmentName,
-        code: this.departmentCode
+        code: this.departmentCode,
+        is_Active: this.is_Active
       })
       .then(() => {
         this.departments.push({
           name: this.departmentName,
-          code: this.departmentCode
+          code: this.departmentCode,
+          is_Active: this.is_Active
         });
 
         this.departmentName = '';
@@ -89,12 +92,24 @@ export default {
 
     deleteDepartment(index) {
       this.departments.splice(index, 1);
+    },
+
+    fetchDepartments() {
+      axios.get('http://127.0.0.1:8000/api/retrieve')
+        .then(response => {
+          this.departments = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching departments:', error);
+        });
     }
+  },
+  mounted() {
+    this.fetchDepartments();
   }
 }
 </script>
 
-  
   
   <style scoped>
   .content-wrapper {
