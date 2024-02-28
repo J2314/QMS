@@ -1,5 +1,7 @@
 <template>
   <div>
+    <Navbar />
+    <Sidebar />
     <div class="content-wrapper">
       <form @submit.prevent="submitForm" class="add-form">
         <h1 class="form-title">Add Forms</h1>
@@ -8,15 +10,15 @@
             <tr>
               <td>
                 <label for="departmentName" class="form-label">Add Name</label>
-                <input type="text" id="departmentName" class="form-control" v-model="departmentName" placeholder="Enter name">
+                <input type="text" id="departmentName" class="form-control" v-model="file_name" placeholder="Enter name">
               </td>
               <td>
                 <label for="departmentCode" class="form-label">Code</label>
-                <input type="text" id="departmentCode" class="form-control" v-model="departmentCode" placeholder="Enter code">
+                <input type="text" id="departmentCode" class="form-control" v-model="file_code" placeholder="Enter code">
               </td>
               <td>
                 <label for="departmentId" class="form-label">Department ID</label>
-                <select id="departmentId" class="form-control" v-model="departmentId">
+                <select id="departmentId" class="form-control" v-model="department_id">
                   <option value="">Select Department</option>
                   <option value="1">Department 1</option>
                   <option value="2">Department 2</option>
@@ -50,40 +52,43 @@
 </template>
 
 <script>
+import axios from 'axios'; 
+import Navbar from '../components/TheNavbar.vue'
+import Sidebar from '../components/TheSidebar.vue'
+
 export default {
-  name: 'AddDepartmentPage',
+  name: 'AddFormPage',
+  components: {
+    Navbar,
+    Sidebar,
+  },
   data() {
     return {
-      departmentName: '',
-      departmentCode: '',
-      departmentId: '',
+      file_name: '',
+      file_code: '',
+      department_id: '',
       isSubmitting: false,
       submitSuccess: false,
       submitError: '',
-      departments: [],
     };
   },
   methods: {
     submitForm() {
-      if (!this.departmentName || !this.departmentCode || !this.departmentId) {
+      if (!this.file_name || !this.file_code || !this.department_id) {
         this.submitError = 'Please fill out all fields.';
         return;
       }
 
-      // Simulating form submission
       this.isSubmitting = true;
-      setTimeout(() => {
-        // Push new department to departments array
-        this.departments.push({
-          name: this.departmentName,
-          code: this.departmentCode,
-          id: this.departmentId
-        });
-
-        // Reset form fields after successful submission
-        this.departmentName = '';
-        this.departmentCode = '';
-        this.departmentId = '';
+      axios.post('http://127.0.0.1:8000/api/forms', {
+        file_name: this.file_name,
+        file_code: this.file_code,
+        department_id: this.department_id,
+      })
+      .then(() => {
+        this.file_name = '';
+        this.file_code = '';
+        this.department_id = '';
         this.isSubmitting = false;
         this.submitSuccess = true;
         setTimeout(() => {
@@ -92,6 +97,7 @@ export default {
       }, 1000);
     },
     deleteDepartment(index) {
+      // Remove department from departments array
       this.departments.splice(index, 1);
     }
   }

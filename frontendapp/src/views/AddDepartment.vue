@@ -1,96 +1,100 @@
 <template>
-    <div>
-      <div class="content-wrapper">
-        <form @submit.prevent="submitForm" class="add-form">
-          <h1 class="form-title">Add Department</h1>
-          <div class="form-table-container">
-            <table class="form-table">
-              <tr>
-                <td>
-                  <label for="departmentName" class="form-label">Department Name</label>
-                  <input type="text" id="departmentName" class="form-control" v-model="departmentName" placeholder="Enter name">
-                </td>
-                <td>
-                  <label for="departmentCode" class="form-label">Department Code</label>
-                  <input type="text" id="departmentCode" class="form-control" v-model="departmentCode" placeholder="Enter code">
-                </td>
-                <td class="button-cell" colspan="2">
-                  <button type="submit" class="btn btn-primary" :disabled="isSubmitting">Add</button>
-                </td>
-              </tr>
-            </table>
-          </div>
-          <table class="form-summary-table">
-            <thead>
-              <tr>
-                <th>Department Name</th>
-                <th>Department Code</th>
-                <th>Action</th>
-              </tr>
-            </thead>
-            <tbody>
-              <tr v-for="(department, index) in departments" :key="index">
-                <td>{{ department.name }}</td>
-                <td>{{ department.code }}</td>
-                <td>
-                  <button @click="deleteDepartment(index)" class="btn btn-danger">Delete</button>
-                </td>
-              </tr>
-            </tbody>
+  <div>
+    <div class="content-wrapper">
+      <form @submit.prevent="submitForm" class="add-form">
+        <h1 class="form-title">Add Department</h1>
+        <div class="form-table-container">
+          <table class="form-table">
+            <tr>
+              <td>
+                <label for="departmentName" class="form-label">Department Name</label>
+                <input type="text" id="departmentName" class="form-control" v-model="departmentName" placeholder="Enter name">
+              </td>
+              <td>
+                <label for="departmentCode" class="form-label">Department Code</label>
+                <input type="text" id="departmentCode" class="form-control" v-model="departmentCode" placeholder="Enter code">
+              </td>
+              <td class="button-cell" colspan="2">
+                <button type="submit" class="btn btn-primary">Add</button>
+              </td>
+            </tr>
           </table>
-          <span v-if="submitSuccess" class="success-message">Department added successfully!</span>
-          <span v-if="submitError" class="error-message">{{ submitError }}</span>
-        </form>
-      </div>
+        </div>
+        <table class="form-summary-table">
+          <thead>
+            <tr>
+              <th>Department Name</th>
+              <th>Department Code</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="(department, index) in departments" :key="index">
+              <td>{{ department.name }}</td>
+              <td>{{ department.code }}</td>
+              <td>
+                <button @click="deleteDepartment(index)" class="btn btn-danger">Delete</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <span v-if="submitError" class="error-message">{{ submitError }}</span>
+      </form>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: 'AddDepartmentPage',
-    data() {
-      return {
-        departmentName: '',
-        departmentCode: '',
-        isSubmitting: false,
-        submitSuccess: false,
-        submitError: '',
-        departments: [], // Array to store added departments
-      };
-    },
-    methods: {
-      submitForm() {
-        if (!this.departmentName || !this.departmentCode) {
-          this.submitError = 'Please fill out all fields.';
-          return;
-        }
-  
-        // Simulating form submission
-        this.isSubmitting = true;
-        setTimeout(() => {
-          // Push new department to departments array
-          this.departments.push({
-            name: this.departmentName,
-            code: this.departmentCode
-          });
-  
-          // Reset form fields after successful submission
-          this.departmentName = '';
-          this.departmentCode = '';
-          this.isSubmitting = false;
-          this.submitSuccess = true;
-          setTimeout(() => {
-            this.submitSuccess = false;
-          }, 3000);
-        }, 1000);
-      },
-      deleteDepartment(index) {
-        // Remove department from departments array
-        this.departments.splice(index, 1);
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'AddDepartmentPage',
+  data() {
+    return {
+      departmentName: '',
+      departmentCode: '',
+      submitError: '',
+      departments: [], 
+    };
+  },
+  methods: {
+    submitForm() {
+      if (!this.departmentName || !this.departmentCode) {
+        this.submitError = 'Please fill out all fields.';
+        return;
       }
+
+      axios.post('http://127.0.0.1:8000/api/department', {
+        name: this.departmentName,
+        code: this.departmentCode
+      })
+      .then(() => {
+        this.departments.push({
+          name: this.departmentName,
+          code: this.departmentCode
+        });
+
+        this.departmentName = '';
+        this.departmentCode = '';
+        this.submitError = '';
+      })
+      .catch(error => {
+        if (error.response && error.response.data && error.response.data.message) {
+          this.submitError = error.response.data.message;
+        } else {
+          this.submitError = 'An error occurred.';
+        }
+      });
+    },
+
+    deleteDepartment(index) {
+      this.departments.splice(index, 1);
     }
   }
-  </script>
+}
+</script>
+
+  
   
   <style scoped>
   .content-wrapper {
@@ -206,4 +210,3 @@
     background-color: #f0f0f0;
   }
   </style>
-  
