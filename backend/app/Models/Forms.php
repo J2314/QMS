@@ -10,8 +10,8 @@ class Forms extends Model
     use HasFactory;
 
     protected $fillable = [
-        'file_code',
         'file_name',
+        'file_code',
         'department_id',
         'is_removed',
     ];

@@ -10,15 +10,15 @@
             <tr>
               <td>
                 <label for="departmentName" class="form-label">Add Name</label>
-                <input type="text" id="departmentName" class="form-control" v-model="departmentName" placeholder="Enter name">
+                <input type="text" id="departmentName" class="form-control" v-model="file_name" placeholder="Enter name">
               </td>
               <td>
                 <label for="departmentCode" class="form-label">Code</label>
-                <input type="text" id="departmentCode" class="form-control" v-model="departmentCode" placeholder="Enter code">
+                <input type="text" id="departmentCode" class="form-control" v-model="file_code" placeholder="Enter code">
               </td>
               <td>
                 <label for="departmentId" class="form-label">Department ID</label>
-                <select id="departmentId" class="form-control" v-model="departmentId">
+                <select id="departmentId" class="form-control" v-model="department_id">
                   <option value="">Select Department</option>
                   <option value="1">Department 1</option>
                   <option value="2">Department 2</option>
@@ -53,6 +53,7 @@
 </template>
 
 <script>
+import axios from 'axios'; 
 import Navbar from '../components/TheNavbar.vue'
 import Sidebar from '../components/TheSidebar.vue'
 
@@ -64,36 +65,45 @@ export default {
   },
   data() {
     return {
-      departmentName: '',
-      departmentCode: '',
-      departmentId: '',
-      isSubmitting: false,
+      file_name: '',
+      file_code: '',
+      department_id: '',
+      isRemoved: false,
       submitSuccess: false,
       submitError: '',
     };
   },
   methods: {
     submitForm() {
-      if (!this.departmentName || !this.departmentCode || !this.departmentId) {
+      if (!this.file_name || !this.file_code || !this.department_id) {
         this.submitError = 'Please fill out all fields.';
         return;
       }
 
       this.isSubmitting = true;
-      setTimeout(() => {
-        this.departmentName = '';
-        this.departmentCode = '';
-        this.departmentId = '';
-        this.isSubmitting = false;
-        this.submitSuccess = true;
+      axios.post('http://127.0.0.1:8000/api/forms', {
+        file_name: this.file_name,
+        file_code: this.file_code,
+        department_id: this.department_id,
+      })
+      .then(() => {
+        this.file_name = '';
+        this.file_code = '';
+        this.department_id = '';
+        this.isRemoved = false;
         setTimeout(() => {
           this.submitSuccess = false;
         }, 3000);
-      }, 1000);
+      })
+      .catch(error => {
+        this.submitError = error.response.data.message || 'An error occurred.';
+        this.isSubmitting = false;
+      });
     },
   }
 }
 </script>
+
 
 <style scoped>
 .content-wrapper {

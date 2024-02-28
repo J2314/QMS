@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserReg;
 use App\Http\Controllers\UserLogin;
 use App\Http\Controllers\FileController;
+use App\Http\Controllers\FormRegistration;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,3 +32,6 @@ Route::post('/upload', [FileController::class, 'upload']);
 
 // Route for fetching submitted files
 Route::get('/submitted-files', [FileController::class, 'submittedFiles']);
+
+
+Route::post('/forms', [FormRegistration::class, 'submitForm']);
