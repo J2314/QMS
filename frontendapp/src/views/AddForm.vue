@@ -17,14 +17,10 @@
                 <input type="text" id="departmentCode" class="form-control" v-model="file_code" placeholder="Enter code">
               </td>
               <td>
-                <label for="departmentId" class="form-label">Department ID</label>
+                <label for="departmentId" class="form-label">Department</label>
                 <select id="departmentId" class="form-control" v-model="department_id">
                   <option value="">Select Department</option>
-                  <option value="1">Department 1</option>
-                  <option value="2">Department 2</option>
-                  <option value="3">Department 3</option>
-                  <option value="4">Department 4</option>
-                  <option value="5">Department 5</option>
+                  <option v-for="(department, index) in departments" :key="index">{{ department.name }}</option>
                 </select>
               </td>
               <td class="button-cell">
@@ -70,6 +66,7 @@ export default {
       isSubmitting: false,
       submitSuccess: false,
       submitError: '',
+      departments: [], // Add departments array to store department list
     };
   },
   methods: {
@@ -96,10 +93,18 @@ export default {
         }, 3000);
       }, 1000);
     },
-    deleteDepartment(index) {
-      // Remove department from departments array
-      this.departments.splice(index, 1);
+    fetchDepartments() {
+      axios.get('http://127.0.0.1:8000/api/retrieve')
+        .then(response => {
+          this.departments = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching departments:', error);
+        });
     }
+  },
+  mounted() {
+    this.fetchDepartments();
   }
 }
 </script>

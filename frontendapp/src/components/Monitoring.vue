@@ -39,8 +39,6 @@
           </tbody>
         </table>
       </div>
-  
-      <!-- User Activity Log -->
       <div class="activity-log">
         <h3>User Activity Log</h3>
         <div v-for="(log, index) in activityLog" :key="index" class="activity-item">
@@ -54,7 +52,7 @@
   
   <script>
   export default {
-    name: 'UserManagement',
+    name: 'MonitoringPage',
     data() {
       return {
         newRole: '', // New role input field
@@ -106,6 +104,7 @@
   }
   
   .page-title {
+    margin-top: -5%;
     font-size: 24px;
     margin-bottom: 20px;
     text-align: center;
