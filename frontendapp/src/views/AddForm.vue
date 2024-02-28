@@ -20,11 +20,12 @@
                 <label for="departmentId" class="form-label">Department</label>
                 <select id="departmentId" class="form-control" v-model="department_id">
                   <option value="">Select Department</option>
-                  <option v-for="(department, index) in departments" :key="index">{{ department.name }}</option>
+                  <option v-for="(department, index) in  departments " :key="index" :value="department.id">{{
+                    department.name }}</option>
                 </select>
               </td>
               <td class="button-cell">
-                <button type="submit" class="btn btn-primary" :disabled="isSubmitting">Add</button>
+                <button type="submit" class="btn btn-primary">Add</button>
               </td>
             </tr>
           </table>
@@ -48,9 +49,9 @@
 </template>
 
 <script>
-import axios from 'axios'; 
-import Navbar from '../components/TheNavbar.vue'
-import Sidebar from '../components/TheSidebar.vue'
+import axios from 'axios';
+import Navbar from '../components/TheNavbar.vue';
+import Sidebar from '../components/TheSidebar.vue';
 
 export default {
   name: 'AddFormPage',
@@ -63,10 +64,8 @@ export default {
       file_name: '',
       file_code: '',
       department_id: '',
-      isSubmitting: false,
-      submitSuccess: false,
       submitError: '',
-      departments: [], // Add departments array to store department list
+      departments: [],
     };
   },
   methods: {
@@ -76,22 +75,27 @@ export default {
         return;
       }
 
-      this.isSubmitting = true;
-      axios.post('http://127.0.0.1:8000/api/forms', {
+      const formData = {
         file_name: this.file_name,
         file_code: this.file_code,
         department_id: this.department_id,
-      })
-      .then(() => {
-        this.file_name = '';
-        this.file_code = '';
-        this.department_id = '';
-        this.isSubmitting = false;
-        this.submitSuccess = true;
-        setTimeout(() => {
-          this.submitSuccess = false;
-        }, 3000);
-      }, 1000);
+      };
+
+      axios.post('http://127.0.0.1:8000/api/form', formData)
+        .then(() => {
+          this.file_name = '';
+          this.file_code = '';
+          this.department_id = '';
+          this.submitError = '';
+          this.fetchDepartments();
+        })
+        .catch(error => {
+          if (error.response && error.response.data && error.response.data.message) {
+            this.submitError = error.response.data.message;
+          } else {
+            this.submitError = 'An error occurred.';
+          }
+        }); 
     },
     fetchDepartments() {
       axios.get('http://127.0.0.1:8000/api/retrieve')
@@ -109,10 +113,14 @@ export default {
 }
 </script>
 
+
+
+
 <style scoped>
 .content-wrapper {
   padding: 20px;
-  margin-top: 60px; /* Adjust the top margin to make space for the fixed navbar */
+  margin-top: 60px;
+  /* Adjust the top margin to make space for the fixed navbar */
 }
 
 .add-form {
@@ -132,8 +140,10 @@ export default {
   border-radius: 6px;
   font-size: 16px;
   margin-bottom: 10px;
-  max-height: 200px; /* Adjust the max height as needed */
-  overflow-y: auto; /* Enable scrolling if needed */
+  max-height: 200px;
+  /* Adjust the max height as needed */
+  overflow-y: auto;
+  /* Enable scrolling if needed */
 }
 
 .btn-primary {
@@ -172,17 +182,17 @@ export default {
 }
 
 .form-table-container {
-  overflow-x: auto; 
+  overflow-x: auto;
 }
 
 .form-table {
   width: 100%;
   border-collapse: collapse;
-  border-spacing: 0; 
+  border-spacing: 0;
 }
 
 .form-table tr {
-  border-bottom: 1px solid #ccc; 
+  border-bottom: 1px solid #ccc;
 }
 
 .form-table td {
@@ -190,7 +200,7 @@ export default {
 }
 
 .button-cell {
-  text-align: right; 
+  text-align: right;
 }
 
 .form-summary-table {
@@ -203,7 +213,7 @@ export default {
 .form-summary-table td {
   border: 1px solid #ccc;
   padding: 10px;
-  text-align: center; 
+  text-align: center;
 }
 
 .form-summary-table th {
