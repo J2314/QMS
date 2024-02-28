@@ -44,18 +44,18 @@ const routes = [
         path: 'calendar',
         name: 'Calendar',
         component: Calendar
+      },
+      {
+        path: 'addDepartment', // Relative to /dashboard
+        name: 'addDepartment',
+        component: AddDepartment
+      },
+      {
+        path: 'addForm', // Relative to /dashboard
+        name: 'addForm',
+        component: AddForm
       }
     ]
-  },
-  {
-    path: '/addDepartment',
-    name: 'addDepartment',
-    component: AddDepartment
-  },
-  {
-    path: '/addForm',
-    name: 'addForm',
-    component: AddForm
   }
 ];
 

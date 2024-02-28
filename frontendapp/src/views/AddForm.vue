@@ -1,6 +1,4 @@
 <template>
-  <Navbar/>
-  <Sidebar/>
   <div>
     <div class="content-wrapper">
       <form @submit.prevent="submitForm" class="add-form">
@@ -52,14 +50,8 @@
 </template>
 
 <script>
-import Navbar from '../components/TheNavbar.vue'
-import Sidebar from '../components/TheSidebar.vue'
 export default {
-  name: 'AddFormPage',
-  components: {
-    Navbar,
-    Sidebar,
-  },
+  name: 'AddDepartmentPage',
   data() {
     return {
       departmentName: '',
@@ -68,6 +60,7 @@ export default {
       isSubmitting: false,
       submitSuccess: false,
       submitError: '',
+      departments: [],
     };
   },
   methods: {
@@ -77,8 +70,17 @@ export default {
         return;
       }
 
+      // Simulating form submission
       this.isSubmitting = true;
       setTimeout(() => {
+        // Push new department to departments array
+        this.departments.push({
+          name: this.departmentName,
+          code: this.departmentCode,
+          id: this.departmentId
+        });
+
+        // Reset form fields after successful submission
         this.departmentName = '';
         this.departmentCode = '';
         this.departmentId = '';
@@ -89,6 +91,10 @@ export default {
         }, 3000);
       }, 1000);
     },
+    deleteDepartment(index) {
+      // Remove department from departments array
+      this.departments.splice(index, 1);
+    }
   }
 }
 </script>
