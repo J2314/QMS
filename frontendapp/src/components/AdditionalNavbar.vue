@@ -1,25 +1,25 @@
 <template>
-    <div>
-      <nav class="additional-navbar">
-        <div class="container">
-          <div class="row">
-            <div class="col">
-              <router-link to="/statistics" class="navbar-link">Statistics</router-link>
-            </div>
-            <div class="col">
-              <router-link to="/announcements" class="navbar-link">Announcements</router-link>
-            </div>
-            <div class="col">
-              <router-link to="/administration" class="navbar-link">Administration</router-link>
-            </div>
-            <div class="col">
-              <router-link to="/calendar" class="navbar-link">Calendar</router-link>
-            </div>
+  <div>
+    <nav class="additional-navbar">
+      <div class="container">
+        <div class="row">
+          <div class="col">
+            <router-link to="/dashboard/statistics" class="navbar-link">Statistics</router-link>
+          </div>
+          <div class="col">
+            <router-link to="/dashboard/announcements" class="navbar-link">Announcements</router-link>
+          </div>
+          <div class="col">
+            <router-link to="/dashboard/administration" class="navbar-link">Administration</router-link>
+          </div>
+          <div class="col">
+            <router-link to="/dashboard/calendar" class="navbar-link">Calendar</router-link>
           </div>
         </div>
-      </nav>
-    </div>
-  </template>
+      </div>
+    </nav>
+  </div>
+</template>
   
   
   <script>

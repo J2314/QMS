@@ -1,7 +1,7 @@
 <template>
+  <Navbar/>
+  <Sidebar/>
     <div>
-        <Navbar/>
-        <Sidebar/>
         <div class="content-wrapper">
             <form @submit.prevent="submitForm" class="add-form">
                 <h1 class="form-title">Add Department</h1> 
@@ -24,13 +24,12 @@
 <script>
 import Navbar from '../components/TheNavbar.vue'
 import Sidebar from '../components/TheSidebar.vue'
-
 export default {
     name: 'AddFormPage',
     components: {
-        Navbar,
-        Sidebar,
-    },
+    Navbar,
+    Sidebar,
+  },
     data() {
         return {
             departmentName: '',

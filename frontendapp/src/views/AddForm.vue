@@ -1,7 +1,7 @@
 <template>
+  <Navbar/>
+  <Sidebar/>
   <div>
-    <Navbar />
-    <Sidebar />
     <div class="content-wrapper">
       <form @submit.prevent="submitForm" class="add-form">
         <h1 class="form-title">Forms</h1>
@@ -25,7 +25,6 @@
                   <option value="3">Department 3</option>
                   <option value="4">Department 4</option>
                   <option value="5">Department 5</option>
-                  <!-- Add more options as needed -->
                 </select>
               </td>
               <td class="button-cell">
@@ -55,7 +54,6 @@
 <script>
 import Navbar from '../components/TheNavbar.vue'
 import Sidebar from '../components/TheSidebar.vue'
-
 export default {
   name: 'AddFormPage',
   components: {
