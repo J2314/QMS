@@ -6,13 +6,13 @@
         <li>
           <a href="#" @click="toggleDepartments">Departments <span v-if="showDepartments" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
           <ul v-show="showDepartments" class="list-unstyled">
-            <li><router-link to="/addDepartment">+ Add Department</router-link></li>
+            <li><router-link to="/dashboard/addDepartment">+ Add Department</router-link></li>
           </ul>
         </li>
         <li>
           <a href="#" @click="toggleForms">Forms <span v-if="showForms" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
           <ul v-show="showForms" class="list-unstyled">
-            <li><router-link to="/addForm">+ Add Forms</router-link></li>
+            <li><router-link to="/dashboard/addForm">+ Add Forms</router-link></li>
           </ul>
         </li>
       </ul>

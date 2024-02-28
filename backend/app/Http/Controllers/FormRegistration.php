@@ -12,9 +12,9 @@ class FormRegistration extends Controller
         $validatedData = $request->validate([
             'file_name' => 'required|string',
             'file_code' => 'required|string',
-            'department_id' => 'required|numeric',
+            'department_id' => 'required|numeric|exists:departments,id',
         ]);
-    
+
         $formData = new Forms();
         $formData->file_name = $validatedData['file_name'];
         $formData->file_code = $validatedData['file_code'];

@@ -1,7 +1,8 @@
 <template>
-    <Navbar />
-    <Sidebar />
-    <AddNav/>
+  <Navbar/>
+  <Sidebar/>
+  <AddNav/>
+  <RouterView></RouterView>
 </template>
 
 
@@ -14,7 +15,7 @@ export default {
   components: {
     Navbar,
     Sidebar,
-    AddNav
+    AddNav,
   }
 }
 </script>

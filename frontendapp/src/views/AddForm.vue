@@ -25,7 +25,6 @@
                   <option value="3">Department 3</option>
                   <option value="4">Department 4</option>
                   <option value="5">Department 5</option>
-                  <!-- Add more options as needed -->
                 </select>
               </td>
               <td class="button-cell">
@@ -68,7 +67,7 @@ export default {
       file_name: '',
       file_code: '',
       department_id: '',
-      isRemoved: false,
+      isSubmitting: false,
       submitSuccess: false,
       submitError: '',
     };
@@ -90,7 +89,8 @@ export default {
         this.file_name = '';
         this.file_code = '';
         this.department_id = '';
-        this.isRemoved = false;
+        this.isSubmitting = false;
+        this.submitSuccess = true;
         setTimeout(() => {
           this.submitSuccess = false;
         }, 3000);
@@ -103,7 +103,6 @@ export default {
   }
 }
 </script>
-
 
 <style scoped>
 .content-wrapper {
