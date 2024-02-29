@@ -20,7 +20,9 @@
             </tr>
           </table>
         </div>
-        <table class="form-summary-table">
+        <span v-if="submitError" class="error-message">{{ submitError }}</span>
+      </form>
+      <table class="form-summary-table">
           <thead>
             <tr>
               <th>Department Name</th>
@@ -29,17 +31,15 @@
             </tr>
           </thead>
           <tbody>
-            <tr v-for="(department, index) in departments" :key="index">
+            <tr v-for="department in departments" :key="department.id">
               <td>{{ department.name }}</td>
               <td>{{ department.code }}</td>
               <td>
-                <button @click="deleteDepartment(index)" class="btn btn-danger">Delete</button>
+                  <button @click="deleteDepartment(department.id)" class="btn btn-danger">Archive</button>
               </td>
-            </tr>
+          </tr>
           </tbody>
         </table>
-        <span v-if="submitError" class="error-message">{{ submitError }}</span>
-      </form>
     </div>
   </div>
 </template>
@@ -89,12 +89,19 @@ export default {
         }
       });
     },
+    async deleteDepartment(depId) {
+        try {
+          console.log('Deleting department with ID:', depId);
 
-    deleteDepartment(index) {
-      this.departments.splice(index, 1);
-    },
-
-    fetchDepartments() {
+          await axios.put(`http://127.0.0.1:8000/api/archive/${depId}`);
+          alert('Department archived successfully');
+          this.fetchDepartments();
+        } catch (error) {
+          console.error('Error archiving department:', error.message);
+          alert('Error archiving department: ' + error.message);
+        }
+      },
+        fetchDepartments() {
       axios.get('http://127.0.0.1:8000/api/retrieve')
         .then(response => {
           this.departments = response.data;
@@ -153,7 +160,7 @@ export default {
   }
   
   .btn-danger {
-    background-color: #dc3545;
+    background-color: gray;
     color: #fff;
     border: none;
     border-radius: 6px;
@@ -164,7 +171,8 @@ export default {
   }
   
   .btn-danger:hover {
-    background-color: #c82333;
+    background-color: lightgray;
+    color: black;
   }
   
   .success-message,
@@ -209,7 +217,8 @@ export default {
   }
   
   .form-summary-table {
-    width: 100%;
+    width: 50%;
+    margin-left: 26%;
     margin-top: 30px;
     border-collapse: collapse;
   }

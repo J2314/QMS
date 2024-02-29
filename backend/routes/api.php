@@ -9,6 +9,7 @@ use App\Http\Controllers\FileController;
 use App\Http\Controllers\DepartmentRetrieve;
 use App\Http\Controllers\FormRegistration;
 use App\Http\Controllers\FormRetrieve;
+use App\Http\Controllers\Archive;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,3 +48,6 @@ Route::post('/form', [FormRegistration::class, 'submitForm']);
 
 // Retrive forms
 Route::get('/retrieve-forms', [FormRetrieve::class, 'getForms']);
+
+// Archive
+Route::put('/archive/{id}', [Archive::class, 'archiveDepartment']);
