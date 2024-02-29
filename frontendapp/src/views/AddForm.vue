@@ -147,7 +147,7 @@ export default {
 }
 
 .add-form {
-  max-width: 600px;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
@@ -225,9 +225,9 @@ export default {
 }
 
 .form-summary-table {
-  width: 50%;
+  width: 65%;
   margin-top: 30px;
-  margin-left: 26%;
+  margin-left: 18%;
   border-collapse: collapse;
 }
 
