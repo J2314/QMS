@@ -24,3 +24,5 @@ class FormRegistration extends Controller
         
         return response()->json(['message' => 'Form submitted successfully']);
 }
+
+}
