@@ -217,7 +217,7 @@ export default {
   }
   
   .form-summary-table {
-    width: 60%;
+    width: 70%;
     margin-left: 26%;
     margin-top: 30px;
     border-collapse: collapse;
