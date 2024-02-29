@@ -35,4 +35,3 @@ class FormRegistration extends Controller
     
 }
 
-}

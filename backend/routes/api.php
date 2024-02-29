@@ -51,3 +51,5 @@ Route::get('/retrieve-forms', [FormRetrieve::class, 'getForms']);
 
 // Archive
 Route::put('/archive/{id}', [Archive::class, 'archiveDepartment']);
+
+Route::put('/archive-forms/{id}', [Archive::class, 'archiveForms']);
