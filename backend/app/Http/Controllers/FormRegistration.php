@@ -15,6 +15,14 @@ class FormRegistration extends Controller
             'department_id' => 'required|numeric|exists:departments,id',
         ]);
     
+        $existingForm = Forms::where('file_name', $validatedData['file_name'])
+                              ->orWhere('file_code', $validatedData['file_code'])
+                              ->first();
+    
+        if ($existingForm) {
+            return response()->json(['message' => 'A form with the same file name or file code already exists'], 400);
+        }
+    
         $formData = new Forms();
         $formData->file_name = $validatedData['file_name'];
         $formData->file_code = $validatedData['file_code'];
@@ -22,7 +30,9 @@ class FormRegistration extends Controller
         $formData->is_removed = false; 
         $formData->save();
         
-        return response()->json(['message' => 'Form submitted successfully']);
+        return response()->json(['message' => 'Form submitted successfully'], 201);
+    }
+    
 }
 
 }

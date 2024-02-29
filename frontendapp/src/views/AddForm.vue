@@ -41,9 +41,8 @@
               <tr v-for="(form, index) in forms" :key="index">
                 <td>{{ form.file_name }}</td>
                 <td>{{ form.department_id }}</td>
-                <!-- Add more table cells for additional form data -->
                 <td>
-                  <button @click="deleteForm(form.id)" class="btn btn-danger">Delete</button>
+                  <button @click="deleteForm(form.id)" class="btn btn-danger">Archive</button>
                 </td>
               </tr>
             </tbody>
@@ -237,4 +236,16 @@
   .form-summary-table th {
     background-color: #f0f0f0;
   }
+
+  .btn-danger{
+    background-color: gray;
+    border-style: none;
+  }
+
+  .btn-danger:hover {
+    background-color: lightgray;
+    color: black;
+  }
+
+
   </style>
