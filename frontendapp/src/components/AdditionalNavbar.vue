@@ -1,6 +1,6 @@
 <template>
   <div>
-    <nav class="additional-navbar" v-if="!isAddFormOrDepartmentRoute">
+    <nav class="additional-navbar" v-if="!removeAddNav">
       <div class="container">
         <div class="row">
           <div class="col">
@@ -24,8 +24,8 @@
 <script>
 export default {
   computed: {
-    isAddFormOrDepartmentRoute() {
-      return this.$route.name === 'addForm' || this.$route.name === 'addDepartment';
+    removeAddNav() {
+      return this.$route.name === 'addForm' || this.$route.name === 'addDepartment' || this.$route.name === 'uploadForm';
     }
   }
 }

@@ -4,8 +4,6 @@
   <AddNav/>
   <RouterView></RouterView>
 </template>
-
-
 <script>
 import Navbar from '../components/TheNavbar.vue'
 import Sidebar from '../components/TheSidebar.vue'
@@ -19,7 +17,5 @@ export default {
   }
 }
 </script>
-
 <style scoped>
-
 </style>

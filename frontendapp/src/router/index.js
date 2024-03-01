@@ -8,6 +8,7 @@ import Statistics from '../components/TheStats.vue'
 import Announcement from '../components/Announcement.vue';
 import Monitoring from '../components/Monitoring.vue';
 import Calendar from '../components/Calendar.vue';
+import UploadForm from '../views/UploadForm.vue'
 
 const routes = [
   {
@@ -46,14 +47,19 @@ const routes = [
         component: Calendar
       },
       {
-        path: 'addDepartment', // Relative to /dashboard
+        path: 'addDepartment', 
         name: 'addDepartment',
         component: AddDepartment
       },
       {
-        path: 'addForm', // Relative to /dashboard
+        path: 'addForm', 
         name: 'addForm',
         component: AddForm
+      },
+      {
+        path: 'uploadForm', 
+        name: 'uploadForm',
+        component: UploadForm
       }
     ]
   }

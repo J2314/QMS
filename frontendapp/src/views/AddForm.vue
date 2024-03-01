@@ -1,7 +1,5 @@
 <template>
   <div>
-    <Navbar />
-    <Sidebar />
     <div class="content-wrapper">
       <form @submit.prevent="submitForm" class="add-form">
         <h1 class="form-title">Add Forms</h1>
@@ -42,7 +40,9 @@
         </thead>
         <tbody>
           <tr v-for="form in forms" :key="form.id">
-            <td>{{ form.file_name }}</td>
+            <td>
+              <router-link :to="{ name: 'uploadForm', params: { id: form.id } }">{{ form.file_name }}</router-link>
+            </td>
             <td>{{ form.department_id }}</td>
             <td>
               <button @click="deleteDepartment(form.id)" class="btn btn-danger">Archive</button>
@@ -56,15 +56,9 @@
 
 <script>
 import axios from 'axios';
-import Navbar from '../components/TheNavbar.vue';
-import Sidebar from '../components/TheSidebar.vue';
 
 export default {
   name: 'AddFormPage',
-  components: {
-    Navbar,
-    Sidebar,
-  },
   data() {
     return {
       file_name: '',
@@ -88,7 +82,7 @@ export default {
         department_id: this.department_id,
       })
         .then(() => {
-          this.file_name = '';
+          this.file_name = ''; // Clear form fields after successful submission
           this.file_code = '';
           this.department_id = '';
           this.submitError = '';
@@ -120,11 +114,11 @@ export default {
           console.error('Error fetching forms:', error);
         });
     },
-    async deleteDepartment(fomrId) {
+    async deleteDepartment(formId) {
       try {
-        console.log('Deleting form with ID:', fomrId);
+        console.log('Deleting form with ID:', formId);
 
-        await axios.put(`http://127.0.0.1:8000/api/archive-forms/${fomrId}`);
+        await axios.put(`http://127.0.0.1:8000/api/archive-forms/${formId}`);
         alert('Form archived successfully');
         this.fetchForms();
       } catch (error) {
