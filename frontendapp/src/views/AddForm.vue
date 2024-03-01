@@ -17,6 +17,10 @@
                 <input type="text" id="departmentCode" class="form-control" v-model="file_code" placeholder="Enter code">
               </td>
               <td>
+                <label for="departmentDescription" class="form-label">Description</label>
+                <input type="text" id="departmentDescription" class="form-control" v-model="description" placeholder="Enter Description">
+              </td>
+              <td>
                 <label for="departmentId" class="form-label">Department</label>
                 <select id="departmentId" class="form-control" v-model="department_id">
                   <option value="">Select Department</option>
@@ -36,6 +40,7 @@
         <thead>
           <tr>
             <th>Form Name</th>
+            <th>Description</th>
             <th>Department</th>
             <th>Action</th>
           </tr>
@@ -44,6 +49,7 @@
           <tr v-for="form in forms" :key="form.id">
             <td>{{ form.file_name }}</td>
             <td>{{ form.department_id }}</td>
+            <td>{{ form.description }}</td>
             <td>
               <button @click="deleteDepartment(form.id)" class="btn btn-danger">Archive</button>
             </td>
@@ -69,6 +75,7 @@ export default {
     return {
       file_name: '',
       file_code: '',
+      description: '',
       department_id: '',
       submitError: '',
       departments: [],
@@ -77,19 +84,21 @@ export default {
   },
   methods: {
     submitForm() {
-      if (!this.file_name || !this.file_code || !this.department_id) {
+      if (!this.file_name || !this.file_code || !this.department_id || !this.description) {
         this.submitError = 'Please fill out all fields.';
         return;
       }
 
       axios.post('http://127.0.0.1:8000/api/form', {
-        file_name: this.file_name,
-        file_code: this.file_code,
-        department_id: this.department_id,
+          file_name: this.file_name,
+          file_code: this.file_code,
+          description: this.description, // Include the description field
+          department_id: this.department_id,
       })
         .then(() => {
           this.file_name = '';
           this.file_code = '';
+          this.description = '';
           this.department_id = '';
           this.submitError = '';
           this.fetchForms();
@@ -177,6 +186,7 @@ export default {
   cursor: pointer;
   transition: background-color 0.3s;
   font-size: 16px;
+  width: 100%;
 }
 
 .btn-primary:hover {
@@ -251,4 +261,11 @@ export default {
   background-color: lightgray;
   color: black;
 }
+
+#departmentId {
+  width: 110%;
+}
+
+
+
 </style>
