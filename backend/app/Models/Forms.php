@@ -12,6 +12,7 @@ class Forms extends Model
     protected $fillable = [
         'file_code',
         'file_name',
+        'description',
         'department_id',
         'is_removed',
     ];

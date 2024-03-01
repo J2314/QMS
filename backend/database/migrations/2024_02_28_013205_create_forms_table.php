@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('file_code');
             $table->text('file_name');
+            $table->string('description');
             $table->unsignedBigInteger('department_id');
             $table->boolean('is_removed');
             $table->timestamps();
