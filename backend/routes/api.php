@@ -10,6 +10,7 @@ use App\Http\Controllers\DepartmentRetrieve;
 use App\Http\Controllers\FormRegistration;
 use App\Http\Controllers\FormRetrieve;
 use App\Http\Controllers\Archive;
+use App\Http\Controllers\FileUpload;
 
 /*
 |--------------------------------------------------------------------------
@@ -31,12 +32,6 @@ Route::post('/register', [UserReg::class, 'register']);
 
 Route::post('/login', [UserLogin::class, 'login']);
 
-// Route for file upload
-Route::post('/upload', [FileController::class, 'upload']);
-
-// Route for fetching submitted files
-Route::get('/submitted-files', [FileController::class, 'submittedFiles']);
-
 // Add department
 Route::post('/department', [DepartmentRegistration::class, 'addDepartment']);
 
@@ -53,3 +48,6 @@ Route::get('/retrieve-forms', [FormRetrieve::class, 'getForms']);
 Route::put('/archive/{id}', [Archive::class, 'archiveDepartment']);
 
 Route::put('/archive-forms/{id}', [Archive::class, 'archiveForms']);
+
+// Upload Files
+Route::post('/upload', [FileUpload::class, 'upload']);

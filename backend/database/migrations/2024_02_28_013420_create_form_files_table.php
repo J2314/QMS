@@ -16,7 +16,6 @@ return new class extends Migration
             $table->unsignedBigInteger('form_id');
             $table->string('file_path')->nullable();
             $table->boolean('is_active');
-            $table-> date('upload_date');
             $table->timestamps();
             
             $table->foreign('form_id')->references('id')->on('forms');

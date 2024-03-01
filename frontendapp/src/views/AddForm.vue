@@ -46,7 +46,7 @@
         <tbody>
           <tr v-for="form in forms" :key="form.id">
             <td>
-              <router-link :to="{ name: 'uploadForm', params: { id: form.id } }">{{ form.file_name }}</router-link>
+            <router-link :to="{ name: 'uploadForm', params: { file_name: form.file_name, department_id: form.department_id } }">{{ form.file_name }}</router-link>
             </td>
             <td>{{ form.department_id }}</td>
             <td>{{ form.description }}</td>
@@ -86,11 +86,11 @@ export default {
       axios.post('http://127.0.0.1:8000/api/form', {
           file_name: this.file_name,
           file_code: this.file_code,
-          description: this.description, // Include the description field
+          description: this.description, 
           department_id: this.department_id,
       })
         .then(() => {
-          this.file_name = ''; // Clear form fields after successful submission
+          this.file_name = ''; 
           this.file_code = '';
           this.description = '';
           this.department_id = '';

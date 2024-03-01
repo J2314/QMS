@@ -13,6 +13,5 @@ class FormFiles extends Model
         'form_id',
         'file_path',
         'is_active',
-        'upload_date',
     ];
 }
