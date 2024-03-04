@@ -41,6 +41,9 @@ Route::get('/retrieve', [DepartmentRetrieve::class, 'getDepartments']);
 // Add forms
 Route::post('/form', [FormRegistration::class, 'submitForm']);
 
+// Retrive Forms per ID
+Route::get('/retrieve-forms/{data}', [FormRetrieve::class, 'retrieve_forms']);
+
 // Retrive forms
 Route::get('/retrieve-forms', [FormRetrieve::class, 'getForms']);
 
@@ -51,3 +54,5 @@ Route::put('/archive-forms/{id}', [Archive::class, 'archiveForms']);
 
 // Upload Files
 Route::post('/upload', [FileUpload::class, 'upload']);
+
+Route::get('/retrieve-upload', [FileUpload::class, 'retrieveUploads']);

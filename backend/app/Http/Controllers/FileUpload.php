@@ -11,13 +11,12 @@ class FileUpload extends Controller
     {
         $request->validate([
             'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,jpg,jpeg,png,gif|max:4096',
-            'file_name' => 'required|string|max:255',
-            'department_id' => 'required|string|max:255',
+            'form_id' => 'required|string|max:255',
         ]);
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
-            $filename = $file->getClientOriginalName(); 
+            $filename = $file->getClientOriginalName();
             $path = 'uploads/' . $filename;
 
             if (FormFiles::where('file_path', $path)->exists()) {
@@ -27,15 +26,21 @@ class FileUpload extends Controller
             $file->move(public_path('uploads'), $filename);
 
             $fileRecord = new FormFiles();
-            $fileRecord->form_id = $request->input('form_id'); 
+            $fileRecord->form_id = $request->input('form_id');
             $fileRecord->file_path = $path;
-            $fileRecord->is_active = true; 
+            $fileRecord->is_active = true;
             $fileRecord->save();
 
             return response()->json(['message' => 'File uploaded successfully', 'file_id' => $fileRecord->id]);
         }
 
         return response()->json(['error' => 'File upload failed'], 422);
+    }
+
+    public function retrieveUploads()
+    {
+        $forms = FormFiles::all();
+        return response()->json($forms);
     }
 }
  

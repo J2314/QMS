@@ -9,8 +9,13 @@ class FormRetrieve extends Controller
 {
     public function getForms()
     {
-        $forms = Forms::where('is_removed', false)->get();
-        
+        $forms = Forms::where('is_removed', false)->with('department')->get();
+
         return response()->json($forms);
+    }
+    function retrieve_forms($data)
+    {
+        $form = Forms::with('department')->find($data);
+        return response(compact('form'), 200);
     }
 }

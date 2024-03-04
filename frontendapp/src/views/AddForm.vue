@@ -46,10 +46,16 @@
       <tbody>
         <tr v-for="form in forms" :key="form.id">
           <td>
-            <router-link id="uploadForm" :to="{ name: 'uploadForm', params: { file_name: form.file_name, department_id: form.department_id, department_name: getDepartmentName(form.department_id) } }">{{ form.file_name }}</router-link>
+            <router-link
+        id="uploadForm"
+        :to="{ name: 'uploadForm', params: { formId: form.id, departmentName: form.department.name, fileName: form.file_name } }"
+        @click="logFormData(form.id, form.department.name, form.department_id)"
+      >
+        {{ form.file_name }}
+      </router-link>
           </td>
           <td>{{ form.description }}</td>
-          <td>{{ getDepartmentName(form.department_id) }}</td>
+          <td>{{ form.department.name }}</td>
           <td>
             <button @click="deleteDepartment(form.id)" class="btn btn-danger">Archive</button>
           </td>
@@ -77,6 +83,12 @@ export default {
     };
   },
   methods: {
+    logFormData(formId, departmentName, department_id) {
+      console.log('Form ID:', formId);
+      console.log('Department ID:', department_id);
+      console.log('Department Name:', departmentName);
+    },
+    
     submitForm() {
       if (!this.file_name || !this.file_code || !this.department_id || !this.description) {
         this.submitError = 'Please fill out all fields.';
@@ -107,7 +119,7 @@ export default {
     },
     fetchDepartments() {
       axios.get('http://127.0.0.1:8000/api/retrieve')
-        .then(response => {
+        .then(response => { 
           this.departments = response.data.filter(department => department.is_Active === true || department.is_Active === 1);
         })
         .catch(error => {

@@ -57,7 +57,7 @@ const routes = [
         component: AddForm
       },
       {
-        path: '/upload/:file_name/:department_id',
+        path: '/upload/:formId/:departmentName/:fileName',
         name: 'uploadForm',
         component: UploadForm,
       }
