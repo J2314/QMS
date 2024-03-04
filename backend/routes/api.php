@@ -55,4 +55,7 @@ Route::put('/archive-forms/{id}', [Archive::class, 'archiveForms']);
 // Upload Files
 Route::post('/upload', [FileUpload::class, 'upload']);
 
-Route::get('/retrieve-upload', [FileUpload::class, 'retrieveUploads']);
+Route::get('/retrieve-upload/{formId}', [FileUpload::class, 'retrieveUploads']);
+
+// View Content
+Route::get('/fetch-file-content/{id}', [ViewContent::class, 'fetchFileContentById']);

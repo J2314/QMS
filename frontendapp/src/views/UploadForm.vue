@@ -11,10 +11,6 @@
         <input type="text" id="department" class="form-control" v-model="departmentName" placeholder="Enter department" readonly>
       </div>
       <div class="form-group">
-        <label for="fileName" class="form-label">File Name:</label>
-        <input type="text" id="fileName" class="form-control" v-model="fileDisplayName" placeholder="Enter file name">
-      </div>
-      <div class="form-group">
         <label for="file" class="form-label">Choose File:</label>
         <input class="form-control form-control-lg me-3" id="formFileLg" type="file" @change="fileSelected" ref="file">
       </div>
@@ -27,21 +23,31 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">File ID</th>
+          <th scope="col">Form ID</th>
           <th id="filePath" scope="col">File Path</th>
           <th scope="col">Date Uploaded</th>
           <th scope="col">Actions</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(item, index) in items" :key="index">
+        <tr v-for="(upload, index) in uploads" :key="index">
           <td>{{ index + 1 }}</td>
-          <td>{{ item.form_id }}</td>
-          <td>{{ item.file_path }}</td>
-          <td>{{ item.uploaded_at }}</td>
+          <td>{{ upload.form_id }}</td>
+          <td>{{ upload.file_path }}</td>
+          <td>{{ upload.created_at }}</td>
+          <td><button type="button" class="btn btn-secondary" @click="viewFile(upload.file_path)">View</button></td>
         </tr>
       </tbody>
     </table>
+
+    <!-- Modal for displaying file content -->
+    <div class="modal" :class="{ 'is-active': showModal }">
+      <div class="modal-background" @click="showModal = false"></div>
+      <div class="modal-content">
+        <iframe :src="fileContentUrl" frameborder="0" width="100%" height="500"></iframe>
+      </div>
+      <button class="modal-close is-large" aria-label="close" @click="showModal = false"></button>
+    </div>
 
     <p v-if="error" class="text-danger">{{ error }}</p>
   </div>
@@ -56,13 +62,11 @@ export default {
     return {
       fileName: '',
       departmentName: '',
-      fileDisplayName: '',
       formId: '',
-      form: {
-        file: null,
-      },
-      items: [],
-      error: ''
+      uploads: [],
+      error: '',
+      showModal: false,
+      fileContentUrl: ''
     };
   },
   methods: {
@@ -82,14 +86,13 @@ export default {
           }
         });
 
-        this.items.push({
-          file_id: response.data.file_id,
+        this.uploads.push({
+          form_id: response.data.form_id,
           file_path: response.data.file_path,
-          uploaded_at: new Date().toISOString(),
+          created_at: response.data.created_at,
         });
 
         this.$refs.file.value = '';
-        this.fileDisplayName = '';
 
         this.error = '';
         alert('File uploaded successfully!');
@@ -103,29 +106,57 @@ export default {
       }
     },
     fileSelected(event) {
-      this.form.file = event.target.files[0];
-      this.fileDisplayName = event.target.files[0].name;
+      const files = event.target.files;
+      if (files.length > 0) {
+        this.form.file = files[0];
+      }
+    },
+    async viewFile(filePath) {
+      try {
+        const response = await axios.get(`http://127.0.0.1:8000/api/fetch-file-content/${filePath}`);
+        
+        this.fileContentUrl = response.data;
+
+        this.showModal = true;
+      } catch (error) {
+        console.error('Error fetching file content:', error);
+      }
     },
     fetchData() {
       const formId = this.$route.params.formId;
-
       axios.get(`http://127.0.0.1:8000/api/retrieve-forms/${formId}`)
         .then(response => {
           console.log(response);
           this.fileName = response.data.form.file_name;
           this.departmentName = response.data.form.department.name;
+          
           this.formId = formId;
+          axios.get(`http://127.0.0.1:8000/api/retrieve-upload/${formId}`)
+            .then(uploadResponse => {
+              this.uploads = uploadResponse.data.map(upload => ({
+                form_id: upload.form_id,
+                file_path: upload.file_path,
+                created_at: upload.created_at,
+              }));
+            })
+            .catch(error => {
+              console.error('Error fetching uploads:', error);
+            });
         })
         .catch(error => {
           console.error('Error fetching department data:', error);
         });
     },
+    retrieveUploads() {
+      this.fetchData();
+    },
   },
   mounted() {
-    this.fetchData();
+    this.retrieveUploads();
   },
 };
 </script>
+
 
 <style scoped>
 .content-wrapper {
@@ -165,6 +196,17 @@ export default {
   transition: background-color 0.3s;
   font-size: 16px;
 }
+
+.btn-secondary{
+  background-color: #007bff;
+  border-style: none;
+  width: 80%;
+}
+
+.btn-secondary:hover{
+  background-color: #0056b3;
+}
+
 
 .btn-primary:hover {
   background-color: #0056b3;

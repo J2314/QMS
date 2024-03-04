@@ -37,10 +37,10 @@ class FileUpload extends Controller
         return response()->json(['error' => 'File upload failed'], 422);
     }
 
-    public function retrieveUploads()
+    public function retrieveUploads($formId)
     {
-        $forms = FormFiles::all();
-        return response()->json($forms);
+        $uploads = FormFiles::where('form_id', $formId)->select('form_id', 'file_path', 'created_at')->get();
+        return response()->json($uploads);
     }
 }
  
