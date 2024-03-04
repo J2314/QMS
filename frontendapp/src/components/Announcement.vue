@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <div>
+    <div class="add-announcement">
       <h2>Add Announcement</h2>
       <div class="form-group">
         <label for="announcementTitle">Title</label>
@@ -23,18 +23,20 @@
       </div>
       <button @click="postAnnouncement" class="btn btn-success">{{ editingIndex === -1 ? 'Post' : 'Update' }}</button>
     </div>
-    <div>
+    <div class="announcements-container">
       <h2>Announcements</h2>
-      <div v-for="(announcement, index) in announcements" :key="index" class="announcement-item">
-        <div class="announcement-info">
-          <div><strong>Title:</strong> {{ announcement.title }}</div>
-          <div><strong>Department:</strong> {{ announcement.department }}</div>
-          <div><strong>Description:</strong> {{ announcement.description }}</div>
-          <div><strong>Content:</strong> {{ announcement.content }}</div>
-        </div>
-        <div class="announcement-actions">
-          <button @click="editAnnouncement(index)" class="btn btn-primary">Edit</button>
-          <button @click="deleteAnnouncement(index)" class="btn btn-danger">Delete</button>
+      <div class="announcements">
+        <div v-for="(announcement, index) in announcements" :key="index" class="announcement-item">
+          <div class="announcement-info">
+            <div><strong>Title:</strong> {{ announcement.title }}</div>
+            <div><strong>Department:</strong> {{ announcement.department }}</div>
+            <div><strong>Description:</strong> {{ announcement.description }}</div>
+            <div><strong>Content:</strong> {{ announcement.content }}</div>
+          </div>
+          <div class="announcement-actions">
+            <button @click="editAnnouncement(index)" class="btn btn-primary">Edit</button>
+            <button @click="deleteAnnouncement(index)" class="btn btn-danger">Delete</button>
+          </div>
         </div>
       </div>
     </div>
@@ -51,12 +53,12 @@ export default {
       announcements: [],
       newAnnouncement: {
         title: '',
-        department: '', // Ensure this is set to an empty string initially
+        department: '', 
         description: '',
         content: ''
       },
       editingIndex: -1,
-      departments: [] // Initialize departments array
+      departments: [] 
     };
   },
   methods: {
@@ -109,24 +111,115 @@ export default {
   margin: 20px auto;
 }
 
-.container div {
+.add-announcement,
+.announcements-container {
   flex: 0 1 48%;
+}
+
+.add-announcement {
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.announcements-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  overflow-y: auto;
+}
+
+.add-announcement h2, .announcements-container h2 {
+  margin-top: 0;
+  margin-bottom: 20px;
+}
+
+.form-group {
+  margin-bottom: 15px;
+}
+
+label {
+  display: block;
+  margin-bottom: 5px;
 }
 
 .form-control {
   width: 100%;
-  margin-bottom: 10px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+textarea {
+  resize: vertical;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-success {
+  background-color: #28a745;
+  color: white;
+}
+
+.btn-danger {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn:hover {
+  background-color: #007bff;
+}
+
+.announcements {
+  height: 300px;
 }
 
 .announcement-item {
+  background-color: #fff;
   border: 1px solid #ccc;
-  border-radius: 5px;
-  padding: 10px;
-  margin-bottom: 10px;
+  border-radius: 8px;
+  padding: 20px;
+  margin-bottom: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .announcement-info {
   margin-bottom: 10px;
+}
+
+.announcement-title {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.announcement-department {
+  color: #666;
+}
+
+.announcement-description {
+  margin-top: 5px;
+  font-style: italic;
+  color: #888;
+}
+
+.announcement-content {
+  margin-top: 10px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
 }
 
 .announcement-actions button {

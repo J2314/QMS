@@ -1,12 +1,14 @@
 <template>
   <div class="container">
-    <div>
-      <h2>View Count</h2>
-      <canvas ref="viewCountChart" width="300" height="150"></canvas>
-    </div>
-    <div>
-      <h2>Download Count</h2>
-      <canvas ref="downloadCountChart" width="300" height="150"></canvas>
+    <div class="chart-container">
+      <div class="chart">
+        <h3>Form Viewing Count</h3>
+        <canvas ref="formViewCountChart" width="300" height="150"></canvas>
+      </div>
+      <div class="chart">
+        <h3>Downloading Count</h3>
+        <canvas ref="downloadingCountChart" width="300" height="150"></canvas>
+      </div>
     </div>
   </div>
 </template>
@@ -15,31 +17,30 @@
 import Chart from 'chart.js/auto';
 
 export default {
-  name: 'StatsPage',
+  name: 'MonitoringPage',
   data() {
     return {
-      viewCounts: [100, 200, 300, 400, 500],
-      downloadCounts: [50, 150, 250, 350, 450],
-      labels: ['January', 'February', 'March', 'April', 'May'] 
+      formViewCounts: [100, 200, 300, 400, 500],
+      downloadingCounts: [50, 150, 250, 350, 450]
     };
   },
   mounted() {
-    this.renderViewCountChart();
-    this.renderDownloadCountChart();
+    this.renderFormViewCountChart();
+    this.renderDownloadingCountChart();
   },
   methods: {
-    renderViewCountChart() {
-      const ctx = this.$refs.viewCountChart.getContext('2d');
+    renderFormViewCountChart() {
+      const ctx = this.$refs.formViewCountChart.getContext('2d');
       new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
-          labels: this.labels,
+          labels: ['January', 'February', 'March', 'April', 'May'],
           datasets: [{
-            label: 'View Count',
-            data: this.viewCounts,
-            backgroundColor: 'rgba(54, 162, 235, 0.6)',
-            borderColor: 'rgba(54, 162, 235, 1)',
-            borderWidth: 1
+            label: 'Form View Count',
+            data: this.formViewCounts,
+            fill: false,
+            borderColor: 'rgb(75, 192, 192)',
+            tension: 0.1
           }]
         },
         options: {
@@ -51,18 +52,18 @@ export default {
         }
       });
     },
-    renderDownloadCountChart() {
-      const ctx = this.$refs.downloadCountChart.getContext('2d');
+    renderDownloadingCountChart() {
+      const ctx = this.$refs.downloadingCountChart.getContext('2d');
       new Chart(ctx, {
-        type: 'bar',
+        type: 'line',
         data: {
-          labels: this.labels,
+          labels: ['January', 'February', 'March', 'April', 'May'],
           datasets: [{
-            label: 'Download Count',
-            data: this.downloadCounts,
-            backgroundColor: 'rgba(255, 99, 132, 0.6)',
-            borderColor: 'rgba(255, 99, 132, 1)',
-            borderWidth: 1
+            label: 'Downloading Count',
+            data: this.downloadingCounts,
+            fill: false,
+            borderColor: 'rgb(255, 99, 132)',
+            tension: 0.1
           }]
         },
         options: {
@@ -75,19 +76,52 @@ export default {
       });
     }
   }
-}
+};
 </script>
 
 <style scoped>
 .container {
-  display: flex;
-  justify-content: space-between;
-  max-width: 700px;
-  margin: 20px auto;
+  max-width: 800px;
+  margin: 60px auto 20px; 
 }
 
-.container div {
-  flex: 0 1 45%; 
-  margin-bottom: 20px;
+.chart-container {
+  margin-top: -5%;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+}
+
+.chart {
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.chart h3 {
+  font-size: 20px;
+  color: #007bff;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.table {
+  margin-bottom: 5%;
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 8px;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+}
+
+.table th {
+  background-color: #f5f5f5;
+}
+
+.table tr:hover {
+  background-color: #f2f2f2;
 }
 </style>
