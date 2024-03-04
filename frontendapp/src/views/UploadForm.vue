@@ -1,120 +1,134 @@
 <template>
-    <div>
-      <div class="content-wrapper">
-        <form @submit.prevent="uploadFile" class="add-form">
-          <h1 class="form-title">Upload Form</h1>
-          <div class="form-group">
-            <label for="formName" class="form-label">Form Name:</label>
-            <input type="text" id="formName" class="form-control" v-model="fileName" placeholder="Enter form name" readonly>
-          </div>
-          <div class="form-group">
-            <label for="department" class="form-label">Department:</label>
-            <input type="text" id="department" class="form-control" v-model="departmentId" placeholder="Enter department" readonly>
-          </div>
-          <div class="form-group">
-            <label for="fileName" class="form-label">File Name:</label>
-            <input type="text" id="fileName" class="form-control" v-model="fileDisplayName" placeholder="Enter file name">
-          </div>
-          <div class="form-group">
-            <label for="file" class="form-label">Choose File:</label>
-            <input class="form-control form-control-lg me-3" id="formFileLg" type="file" @change="fileSelected" ref="file">
-          </div>
-          <div class="d-flex align-items-center">
-            <button type="submit" class="btn btn-primary btn-lg">Upload</button>
-          </div>
-        </form>
-  
-        <table id="cusTable" class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">File ID</th>
-              <th id="filePath" scope="col">File Path</th>
-              <th scope="col">Date Uploaded</th>
-              <th scope="col">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr v-for="(item, index) in items" :key="index">
-              <td>{{ index + 1 }}</td>
-              <td>{{ item.file_id }}</td>
-              <td>{{ item.file_path }}</td>
-              <td>{{ item.uploaded_at }}</td>
-            </tr>
-          </tbody>
-        </table>
-        
-        <p v-if="error" class="text-danger">{{ error }}</p>
-      </div>
+  <div>
+    <div class="content-wrapper">
+      <form @submit.prevent="uploadFile" class="add-form">
+        <h1 class="form-title">Upload Form</h1>
+        <div class="form-group">
+          <label for="formName" class="form-label">Form Name:</label>
+          <input type="text" id="formName" class="form-control" v-model="fileName" placeholder="Enter form name" readonly>
+        </div>
+        <div class="form-group">
+          <label for="department" class="form-label">Department:</label>
+          <input type="text" id="department" class="form-control" v-model="departmentName" placeholder="Enter department" readonly>
+        </div>
+        <div class="form-group">
+          <label for="fileName" class="form-label">File Name:</label>
+          <input type="text" id="fileName" class="form-control" v-model="fileDisplayName" placeholder="Enter file name">
+        </div>
+        <div class="form-group">
+          <label for="file" class="form-label">Choose File:</label>
+          <input class="form-control form-control-lg me-3" id="formFileLg" type="file" @change="fileSelected" ref="file">
+        </div>
+        <div class="d-flex align-items-center">
+          <button type="submit" class="btn btn-primary btn-lg">Upload</button>
+        </div>
+      </form>
+
+      <table id="cusTable" class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">File ID</th>
+            <th id="filePath" scope="col">File Path</th>
+            <th scope="col">Date Uploaded</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(item, index) in items" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ item.file_id }}</td>
+            <td>{{ item.file_path }}</td>
+            <td>{{ item.uploaded_at }}</td>
+          </tr>
+        </tbody>
+      </table>
+      
+      <p v-if="error" class="text-danger">{{ error }}</p>
     </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    name: 'UploadForm',
-    data() {
-      return {
-        fileName: '',
-        departmentId: '',
-        fileDisplayName: '',
-        form: {
-          file: null,
-        },
-        items: [],
-        error: ''
-      };
-    },
-    methods: {
-      async uploadFile() {
-        try {
-          if (!this.form.file) {
-            throw new Error('Please select a file.');
-          }
-  
-          const formData = new FormData();
-          formData.append('file', this.form.file);
-          formData.append('file_name', this.fileDisplayName);
-          formData.append('department_id', this.departmentId);
-  
-          const response = await axios.post('http://127.0.0.1:8000/api/upload', formData, {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            }
-          });
-  
-          this.items.push({
-            file_id: response.data.file_id,
-            file_path: response.data.file_path,
-            uploaded_at: new Date().toISOString(),
-          });
-  
-          this.fileDisplayName = '';
-          this.$refs.file.value = '';
-  
-          this.error = '';
-          alert('File uploaded successfully!');
-        } catch (error) {
-          if (error.response && error.response.status === 422) {
-            this.error = error.response.data.error || 'Validation error.';
-          } else {
-            this.error = 'Error uploading file.';
-            console.error('Error uploading file:', error.message);
-          }
+  </div>
+</template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'UploadForm',
+  data() {
+    return {
+      fileName: '',
+      departmentId: '',
+      departmentName: '',
+      fileDisplayName: '',
+      form: {
+        file: null,
+      },
+      items: [],
+      error: ''
+    };
+  },
+  methods: {
+    async uploadFile() {
+      try {
+        if (!this.form.file) {
+          throw new Error('Please select a file.');
         }
-      },
-      fileSelected(event) {
-        this.form.file = event.target.files[0];
-        this.fileDisplayName = event.target.files[0].name;
-      },
+
+        const formData = new FormData();
+        formData.append('file', this.form.file);
+        formData.append('file_name', this.fileDisplayName);
+        formData.append('department_id', this.departmentId);
+
+        const response = await axios.post('http://127.0.0.1:8000/api/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          }
+        });
+
+        this.items.push({
+          file_id: response.data.file_id,
+          file_path: response.data.file_path,
+          uploaded_at: new Date().toISOString(),
+        });
+
+        this.fileDisplayName = '';
+        this.$refs.file.value = '';
+
+        this.error = '';
+        alert('File uploaded successfully!');
+      } catch (error) {
+        if (error.response && error.response.status === 422) {
+          this.error = error.response.data.error || 'Validation error.';
+        } else {
+          this.error = 'Error uploading file.';
+          console.error('Error uploading file:', error.message);
+        }
+      }
     },
-    mounted() {
-      this.fileName = this.$route.params.file_name || '';
-      this.departmentId = this.$route.params.department_id || '';
+    fileSelected(event) {
+      this.form.file = event.target.files[0];
+      this.fileDisplayName = event.target.files[0].name;
     },
-  };
-  </script>
+    fetchDepartmentName() {
+      axios.get(`http://127.0.0.1:8000/api/department/${this.departmentId}`)
+        .then(response => {
+          this.departmentName = response.data.name;
+        })
+        .catch(error => {
+          console.error('Error fetching department name:', error);
+          this.departmentName = 'Unknown';
+        });
+    },
+  },
+  mounted() { 
+    this.fileName = this.$route.params.file_name || '';
+    this.departmentId = this.$route.params.department_id || '';
+    this.departmentName = this.$route.params.department_name || '';
+    this.fetchDepartmentName();
+  },
+};
+</script>
+
   
   <style scoped>
   .content-wrapper {
@@ -199,5 +213,7 @@
     width: 100%;
     margin-right: 50px;
   }
+
+
   </style>
   

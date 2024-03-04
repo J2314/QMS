@@ -35,27 +35,27 @@
         <span v-if="submitError" class="error-message">{{ submitError }}</span>
       </form>
       <table class="form-summary-table">
-        <thead>
-          <tr>
-            <th>Form Name</th>
-            <th>Description</th>
-            <th>Department</th>
-            <th>Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="form in forms" :key="form.id">
-            <td>
-            <router-link :to="{ name: 'uploadForm', params: { file_name: form.file_name, department_id: form.department_id } }">{{ form.file_name }}</router-link>
-            </td>
-            <td>{{ form.department_id }}</td>
-            <td>{{ form.description }}</td>
-            <td>
-              <button @click="deleteDepartment(form.id)" class="btn btn-danger">Archive</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <thead>
+        <tr>
+          <th>Form Name</th>
+          <th>Description</th>
+          <th>Department</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="form in forms" :key="form.id">
+          <td>
+            <router-link id="uploadForm" :to="{ name: 'uploadForm', params: { file_name: form.file_name, department_id: form.department_id, department_name: getDepartmentName(form.department_id) } }">{{ form.file_name }}</router-link>
+          </td>
+          <td>{{ form.description }}</td>
+          <td>{{ getDepartmentName(form.department_id) }}</td>
+          <td>
+            <button @click="deleteDepartment(form.id)" class="btn btn-danger">Archive</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
     </div>
   </div>
 </template>
@@ -134,7 +134,11 @@ export default {
         console.error('Error archiving form:', error.message);
         alert('Error archiving form: ' + error.message);
       }
-    }
+    },
+    getDepartmentName(departmentId) {
+    const department = this.departments.find(dep => dep.id === departmentId);
+    return department ? department.name : 'Unknown';
+    },
   },
   mounted() {
     this.fetchDepartments();
@@ -260,6 +264,9 @@ export default {
   width: 110%;
 }
 
+#uploadForm{
+  text-decoration: none;
+}
 
 
 </style>
