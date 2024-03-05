@@ -21,9 +21,14 @@ class Forms extends Model
     {
         return $this->belongsTo(Department::class, 'department_id');
     }
-    
+
     function form_files()
     {
         return $this->hasMany(FormFiles::class, 'form_id');
+    }
+    
+    function form_file()
+    {
+        return $this->hasOne(FormFiles::class, 'form_id');
     }
 }

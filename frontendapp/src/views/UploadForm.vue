@@ -35,7 +35,7 @@
           <td>{{ index + 1 }}</td>
           <td>{{ upload.id }}</td>
           <td>{{ upload.file_path }}</td>
-          <td>{{ formatDate(upload.created_at) }} {{ upload.id }}</td>
+          <td>{{ formatDate(upload.created_at) }}</td>
           <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View PDF</button>
           </td>
         </tr>
@@ -182,8 +182,8 @@ export default {
 }
 
 .add-form {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 500px;
+  margin-left: 250px;
 }
 
 .form-label {
@@ -217,7 +217,7 @@ export default {
 .btn-secondary {
   background-color: #007bff;
   border-style: none;
-  width: 50%;
+  width: 70%;
   height: 50px;
 }
 
@@ -277,9 +277,9 @@ export default {
   margin-left: 338px;
   display: block;
   width: 64.1%;
-  height: auto; /* Set height to auto to adjust dynamically */
-  max-height: 600px; /* Set a maximum height if needed */
-  overflow: auto; /* Add overflow property to enable scrolling if needed */
+  height: auto; 
+  max-height: 600px; 
+  overflow: auto;
 }
 
 </style>
