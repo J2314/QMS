@@ -11,6 +11,8 @@ use App\Http\Controllers\FormRegistration;
 use App\Http\Controllers\FormRetrieve;
 use App\Http\Controllers\Archive;
 use App\Http\Controllers\FileUpload;
+use App\Http\Controllers\ViewContent;
+use App\Http\Controllers\ViewPDF;
 
 /*
 |--------------------------------------------------------------------------
@@ -57,5 +59,7 @@ Route::post('/upload', [FileUpload::class, 'upload']);
 
 Route::get('/retrieve-upload/{formId}', [FileUpload::class, 'retrieveUploads']);
 
-// View Content
-Route::get('/fetch-file-content/{id}', [ViewContent::class, 'fetchFileContentById']);
+// View PDF
+Route::get('/get-file-content/{fileId}', [ViewPDF::class, 'getFileContent']);
+
+

@@ -16,9 +16,14 @@ class Forms extends Model
         'department_id',
         'is_removed',
     ];
-    
+
     function department()
     {
         return $this->belongsTo(Department::class, 'department_id');
+    }
+    
+    function form_files()
+    {
+        return $this->hasMany(FormFiles::class, 'form_id');
     }
 }

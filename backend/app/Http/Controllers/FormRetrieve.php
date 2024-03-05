@@ -13,9 +13,10 @@ class FormRetrieve extends Controller
 
         return response()->json($forms);
     }
+    
     function retrieve_forms($data)
     {
-        $form = Forms::with('department')->find($data);
+        $form = Forms::with('department')->with('form_files')->find($data);
         return response(compact('form'), 200);
     }
 }

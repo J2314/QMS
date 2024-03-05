@@ -8,7 +8,8 @@
       </div>
       <div class="form-group">
         <label for="department" class="form-label">Department:</label>
-        <input type="text" id="department" class="form-control" v-model="departmentName" placeholder="Enter department" readonly>
+        <input type="text" id="department" class="form-control" v-model="departmentName" placeholder="Enter department"
+          readonly>
       </div>
       <div class="form-group">
         <label for="file" class="form-label">Choose File:</label>
@@ -30,26 +31,19 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(upload, index) in uploads" :key="index">
+        <tr v-for="(upload, index) in formFiles" :key="index">
           <td>{{ index + 1 }}</td>
-          <td>{{ upload.form_id }}</td>
+          <td>{{ upload.id }}</td>
           <td>{{ upload.file_path }}</td>
-          <td>{{ upload.created_at }}</td>
-          <td><button type="button" class="btn btn-secondary" @click="viewFile(upload.file_path)">View</button></td>
+          <td>{{ formatDate(upload.created_at) }} {{ upload.id }}</td>
+          <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View PDF</button>
+          </td>
         </tr>
       </tbody>
     </table>
 
-    <!-- Modal for displaying file content -->
-    <div class="modal" :class="{ 'is-active': showModal }">
-      <div class="modal-background" @click="showModal = false"></div>
-      <div class="modal-content">
-        <iframe :src="fileContentUrl" frameborder="0" width="100%" height="500"></iframe>
-      </div>
-      <button class="modal-close is-large" aria-label="close" @click="showModal = false"></button>
-    </div>
+    <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer"></iframe>
 
-    <p v-if="error" class="text-danger">{{ error }}</p>
   </div>
 </template>
 
@@ -64,16 +58,35 @@ export default {
       departmentName: '',
       formId: '',
       uploads: [],
+      formFiles: [],
       error: '',
-      showModal: false,
-      fileContentUrl: ''
+      form: {
+        file: null
+      }
     };
   },
   methods: {
+    openPdf(fileId) {
+      axios.get(`http://127.0.0.1:8000/api/get-file-content/${fileId}`)
+        .then(response => {
+          console.log(response.data)
+           const fileContent = response.data.file_content;
+           const pdfViewer = this.$refs.pdfViewer;
+ 
+           pdfViewer.src = `data:application/pdf;base64,${btoa(fileContent)}`;
+        })
+        .catch(error => {
+          console.error('Error fetching file content:', error);
+        });
+    },
     async uploadFile() {
       try {
         if (!this.form.file) {
           throw new Error('Please select a file.');
+        }
+
+        if (this.form.file.size === 0) {
+          throw new Error('File cannot be empty.');
         }
 
         const formData = new FormData();
@@ -86,22 +99,36 @@ export default {
           }
         });
 
-        this.uploads.push({
+        const newUpload = {
           form_id: response.data.form_id,
           file_path: response.data.file_path,
           created_at: response.data.created_at,
-        });
+        };
 
-        this.$refs.file.value = '';
+        this.uploads.unshift(newUpload);
+
+        this.form.file = null;
 
         this.error = '';
         alert('File uploaded successfully!');
+
+        this.retrieveUploads();
       } catch (error) {
         if (error.response && error.response.status === 422) {
-          this.error = error.response.data.error || 'Validation error.';
+          if (error.response.data.error === 'File with the same name already exists') {
+            alert('A file with the same name already exists.');
+          } else {
+            this.error = error.response.data.error || 'Validation error.';
+          }
         } else {
           this.error = 'Error uploading file.';
           console.error('Error uploading file:', error.message);
+        }
+
+        if (error.message === 'Please select a file.') {
+          alert('Please select a file.');
+        } else if (error.message === 'File cannot be empty.') {
+          alert('File cannot be empty.');
         }
       }
     },
@@ -111,17 +138,6 @@ export default {
         this.form.file = files[0];
       }
     },
-    async viewFile(filePath) {
-      try {
-        const response = await axios.get(`http://127.0.0.1:8000/api/fetch-file-content/${filePath}`);
-        
-        this.fileContentUrl = response.data;
-
-        this.showModal = true;
-      } catch (error) {
-        console.error('Error fetching file content:', error);
-      }
-    },
     fetchData() {
       const formId = this.$route.params.formId;
       axios.get(`http://127.0.0.1:8000/api/retrieve-forms/${formId}`)
@@ -129,19 +145,8 @@ export default {
           console.log(response);
           this.fileName = response.data.form.file_name;
           this.departmentName = response.data.form.department.name;
-          
           this.formId = formId;
-          axios.get(`http://127.0.0.1:8000/api/retrieve-upload/${formId}`)
-            .then(uploadResponse => {
-              this.uploads = uploadResponse.data.map(upload => ({
-                form_id: upload.form_id,
-                file_path: upload.file_path,
-                created_at: upload.created_at,
-              }));
-            })
-            .catch(error => {
-              console.error('Error fetching uploads:', error);
-            });
+          this.formFiles = response.data.form.form_files
         })
         .catch(error => {
           console.error('Error fetching department data:', error);
@@ -150,6 +155,18 @@ export default {
     retrieveUploads() {
       this.fetchData();
     },
+    formatDate(dateString) {
+      const date = new Date(dateString);
+      const month = String(date.getMonth() + 1).padStart(2, '0');
+      const day = String(date.getDate()).padStart(2, '0');
+      const year = date.getFullYear();
+      let hours = date.getHours();
+      const minutes = String(date.getMinutes()).padStart(2, '0');
+      const meridiem = hours >= 12 ? 'PM' : 'AM';
+      hours = hours % 12 || 12;
+      const formattedTime = `${hours}:${minutes} ${meridiem}`;
+      return `${month}/${day}/${year} ${formattedTime}`;
+    }
   },
   mounted() {
     this.retrieveUploads();
@@ -157,11 +174,11 @@ export default {
 };
 </script>
 
-
 <style scoped>
 .content-wrapper {
   padding: 20px;
   margin-top: 60px;
+  overflow-y: auto;
 }
 
 .add-form {
@@ -197,16 +214,16 @@ export default {
   font-size: 16px;
 }
 
-.btn-secondary{
+.btn-secondary {
   background-color: #007bff;
   border-style: none;
-  width: 80%;
+  width: 50%;
+  height: 50px;
 }
 
-.btn-secondary:hover{
+.btn-secondary:hover {
   background-color: #0056b3;
 }
-
 
 .btn-primary:hover {
   background-color: #0056b3;
@@ -237,6 +254,7 @@ export default {
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
+  vertical-align: middle;
 }
 
 .table-hover th {
@@ -252,4 +270,16 @@ export default {
   width: 100%;
   margin-right: 50px;
 }
+
+.pdf-viewer {
+  border: 1px solid #ccc;
+  margin-top: 30px;
+  margin-left: 338px;
+  display: block;
+  width: 64.1%;
+  height: auto; /* Set height to auto to adjust dynamically */
+  max-height: 600px; /* Set a maximum height if needed */
+  overflow: auto; /* Add overflow property to enable scrolling if needed */
+}
+
 </style>

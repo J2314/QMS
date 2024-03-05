@@ -4,26 +4,34 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\FormFiles;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\URL;
 
 class FileUpload extends Controller
-{  
+{
     public function upload(Request $request)
     {
         $request->validate([
-            'file' => 'required|file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt,jpg,jpeg,png,gif|max:4096',
+            'file' => 'required|file|mimes:txt,doc,docx,pdf|max:10240',
             'form_id' => 'required|string|max:255',
         ]);
 
         if ($request->hasFile('file')) {
             $file = $request->file('file');
+
+            if ($file->getSize() === 0) {
+                return response()->json(['error' => 'The uploaded file is empty.'], 422);
+            }
+
             $filename = $file->getClientOriginalName();
             $path = 'uploads/' . $filename;
 
-            if (FormFiles::where('file_path', $path)->exists()) {
-                return response()->json(['error' => 'File with the same name already exists'], 422);
-            }
+            $existingRecord = FormFiles::where('form_id', $request->input('form_id'))
+                ->where('file_path', $path)
+                ->first();
 
-            $file->move(public_path('uploads'), $filename);
+            Storage::disk('public')->put($path, fopen($request->file('file'), 'r+'));
+            $path = URL::to('/') .'/storage/'. $path;
 
             $fileRecord = new FormFiles();
             $fileRecord->form_id = $request->input('form_id');
@@ -39,8 +47,7 @@ class FileUpload extends Controller
 
     public function retrieveUploads($formId)
     {
-        $uploads = FormFiles::where('form_id', $formId)->select('form_id', 'file_path', 'created_at')->get();
+        $uploads = FormFiles::where('form_id', $formId)->select('id','form_id', 'file_path', 'created_at')->get();
         return response()->json($uploads);
     }
 }
- 
