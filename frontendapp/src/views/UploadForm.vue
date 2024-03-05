@@ -43,7 +43,6 @@
   </div>
 
   <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%"></iframe>
-  
 </template>
 
 <script>
@@ -68,10 +67,10 @@ export default {
     openPdf(fileId) {
       axios.get(`http://127.0.0.1:8000/api/get-file-content/${fileId}`)
         .then(response => {
-          const fileContent = response.data.file_content;
+          const fileContent = response.data.file.file_path;
           const pdfViewer = this.$refs.pdfViewer;
-
-          pdfViewer.src = `data:application/pdf;base64,${btoa(fileContent)}`;
+          
+          pdfViewer.src = fileContent;
         })
         .catch(error => {
           console.error('Error fetching file content:', error);
