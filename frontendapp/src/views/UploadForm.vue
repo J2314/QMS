@@ -24,7 +24,6 @@
       <thead>
         <tr>
           <th scope="col">#</th>
-          <th scope="col">Form ID</th>
           <th id="filePath" scope="col">File Path</th>
           <th scope="col">Date Uploaded</th>
           <th scope="col">Actions</th>
@@ -33,7 +32,6 @@
       <tbody>
         <tr v-for="(upload, index) in formFiles" :key="index">
           <td>{{ index + 1 }}</td>
-          <td>{{ upload.id }}</td>
           <td>{{ upload.file_path }}</td>
           <td>{{ formatDate(upload.created_at) }}</td>
           <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View PDF</button>
@@ -42,9 +40,9 @@
       </tbody>
     </table>
 
-    <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer"></iframe>
-
   </div>
+
+  <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%"></iframe>
 </template>
 
 <script>
@@ -179,10 +177,11 @@ export default {
   padding: 20px;
   margin-top: 60px;
   overflow-y: auto;
+  flex: 1;
 }
 
 .add-form {
-  max-width: 500px;
+  max-width: 700px;
   margin-left: 250px;
 }
 
@@ -217,8 +216,8 @@ export default {
 .btn-secondary {
   background-color: #007bff;
   border-style: none;
-  width: 70%;
-  height: 50px;
+  width: 100%;
+  height: 40px;
 }
 
 .btn-secondary:hover {
@@ -238,8 +237,8 @@ export default {
 
 #cusTable {
   margin-top: 40px;
-  margin-left: 18%;
-  width: 64%;
+  margin-left: 13.3%;
+  max-width: 700px;
 }
 
 .table-hover {
@@ -273,13 +272,10 @@ export default {
 
 .pdf-viewer {
   border: 1px solid #ccc;
-  margin-top: 30px;
-  margin-left: 338px;
+  margin-top: -29.5%;
+  margin-left: 55%;
   display: block;
-  width: 64.1%;
-  height: auto; 
-  max-height: 600px; 
-  overflow: auto;
+  width: 800px;
 }
 
 </style>
