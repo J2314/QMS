@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import Login from '../views/Login.vue';
 import SignUp from '../views/Signup.vue';
-import Dashboard from '../views/Dashboard.vue';
+import Dashboard from '../views/AdminDashboard.vue';
 import AddDepartment from '../views/AddDepartment.vue';
 import AddForm from '../views/AddForm.vue';
 import Statistics from '../components/TheStats.vue'
@@ -27,9 +27,14 @@ const routes = [
     component: Dashboard,
     children: [
       {
+        path: '',
+        name: 'DashboardDefault',
+        component: Statistics,
+      },
+      {
         path: 'statistics',
         name: 'Statistics',
-        component: Statistics
+        component: Statistics,
       },
       {
         path: 'announcements',

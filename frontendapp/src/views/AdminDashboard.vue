@@ -1,7 +1,7 @@
 <template>
   <Navbar/>
   <Sidebar/>
-  <AddNav/>
+  <AddNav />
   <RouterView></RouterView>
 </template>
 <script>
@@ -9,7 +9,7 @@ import Navbar from '../components/TheNavbar.vue'
 import Sidebar from '../components/TheSidebar.vue'
 import AddNav from '../components/AdditionalNavbar.vue'
 export default {
-  name: 'DashboardPage',
+  name: 'AdminDashboardPage',
   components: {
     Navbar,
     Sidebar,
