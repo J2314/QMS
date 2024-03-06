@@ -39,10 +39,10 @@
         </tr>
       </tbody>
     </table>
-
+    <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%"></iframe>
   </div>
 
-  <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%"></iframe>
+
 </template>
 
 <script>
@@ -270,7 +270,9 @@ export default {
 }
 
 .pdf-viewer {
+  position: fixed;
   border: 1px solid #ccc;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   margin-top: -29.5%;
   margin-left: 53%;
   display: block;
