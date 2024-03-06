@@ -19,29 +19,77 @@
         </div>
       </div>
 
-      <!-- Add Timeline and Deadline Buttons -->
       <div class="add-event-buttons">
         <button @click="openModal('timeline')">Add Timeline</button>
         <button @click="openModal('deadline')">Add Deadline</button>
       </div>
     </div>
 
-    <!-- Modal for Adding Events -->
-    <div v-if="isModalOpen" class="modal">
-      <div class="modal-content">
-        <span class="close" @click="closeModal">&times;</span>
-        <h2>{{ modalType === 'timeline' ? 'Add Timeline' : 'Add Deadline' }}</h2>
-        <label for="eventDate">Date:</label>
-        <input type="text" id="eventDate" v-model="eventDate" placeholder="YYYY-MM-DD" />
-        <label for="eventContent">Content:</label>
-        <textarea id="eventContent" v-model="eventContent" placeholder="Event details..."></textarea>
-        <button @click="addEvent">Add Event</button>
+    <div class="space"></div>
+
+    <div class="event-section">
+      <div class="event-container timeline-container">
+        <h2 class="titleko">Timelines</h2>
+        <div class="event-cards-container">
+          <div v-for="event in filteredTimelines" :key="event.id" class="event-card timeline">
+            <h3 class="event-title">{{ event.title }}</h3>
+            <p><strong>Date:</strong> {{ event.date }}</p>
+            <p><strong>Department:</strong> {{ event.department }}</p>
+            <p><strong>Content:</strong> {{ event.content }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="event-container deadline-container">
+        <h2 class="titleko">Deadlines</h2>
+        <div class="event-cards-container">
+          <div v-for="event in filteredDeadlines" :key="event.id" class="event-card deadline">
+            <h3 class="event-title">{{ event.title }}</h3>
+            <p><strong>Date:</strong> {{ event.date }}</p>
+            <p><strong>Department:</strong> {{ event.department }}</p>
+            <p><strong>Content:</strong> {{ event.content }}</p>
+          </div>
+        </div>
       </div>
     </div>
+
+    <div v-if="isModalOpen" class="modal">
+  <div class="modal-content">
+    <span class="close" @click="closeModal">&times;</span>
+    <h2 class="modal-title">{{ getModalTitle() }}</h2>
+
+    <div v-if="modalType === 'timeline' || modalType === 'deadline'" class="form-group">
+      <label for="eventTitle">{{ modalType === 'timeline' ? 'Title' : 'Title' }}:</label>
+      <input type="text" id="eventTitle" v-model="eventTitle" class="form-control" />
+    </div>
+
+    <div class="form-group">
+      <label for="eventDate">Date:</label>
+      <input type="date" id="eventDate" v-model="eventDate" class="form-control" />
+    </div>
+
+    <div v-if="modalType !== 'department'" class="form-group">
+      <label for="eventDepartment">Department:</label>
+      <select id="eventDepartment" v-model="eventDepartment" class="form-control">
+        <option value="">Select Department</option>
+        <option v-for="(department, index) in departments" :key="index" :value="department.name">{{ department.name }}</option>
+      </select>
+    </div>
+
+    <div v-if="modalType !== 'department'" class="form-group">
+      <label for="eventContent">Content:</label>
+      <textarea id="eventContent" v-model="eventContent" placeholder="Event details..." class="form-control"></textarea>
+    </div>
+
+    <button @click="addEvent" class="btn btn-primary">Add Event</button>
+  </div>
+</div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+
 export default {
   name: 'CalendarPage',
   data() {
@@ -55,6 +103,8 @@ export default {
       modalType: '',
       eventDate: '',
       eventContent: '',
+      departments: [],
+      eventDepartment: '',
     };
   },
   computed: {
@@ -67,6 +117,7 @@ export default {
   },
   mounted() {
     this.updateCalendar();
+    this.fetchDepartments();
   },
   methods: {
     updateCalendar() {
@@ -95,25 +146,39 @@ export default {
     openModal(type) {
       this.isModalOpen = true;
       this.modalType = type;
-      this.eventDate = ''; // Clear previous input
-      this.eventContent = ''; // Clear previous input
+      this.eventDate = '';
+      this.eventContent = '';
+      this.eventDepartment = '';
     },
     closeModal() {
       this.isModalOpen = false;
     },
     addEvent() {
-      if (this.eventDate && this.eventContent) {
+      if (this.eventDate && this.eventContent && this.eventDepartment) {
         const newEvent = {
           id: this.events.length + 1,
           type: this.modalType,
           date: this.eventDate,
+          department: this.eventDepartment,
           content: this.eventContent,
         };
         this.events.push(newEvent);
         this.closeModal();
       } else {
-        alert('Please fill in both date and content fields.');
+        alert('Please fill in all fields.');
       }
+    },
+    getModalTitle() {
+      return this.modalType === 'timeline' ? 'Add Timeline' : this.modalType === 'deadline' ? 'Add Deadline' : 'Add Department';
+    },
+    fetchDepartments() {
+      axios.get('http://127.0.0.1:8000/api/retrieve')
+        .then(response => {
+          this.departments = response.data;
+        })
+        .catch(error => {
+          console.error('Error fetching departments:', error);
+        });
     },
   },
 };
@@ -206,92 +271,147 @@ export default {
 
 .add-event-buttons button {
   margin-right: 10px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #4caf50;
+  color: #fff;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-.events {
-  max-height: 400px;
-  overflow-y: auto;
-}
-
-.events h3 {
-  font-size: 18px;
-  color: #007bff;
-  margin-bottom: 10px;
-}
-
-.timeline-item,
-.deadline-item {
-  margin-bottom: 10px;
-}
-
-.timeline-date,
-.deadline-date {
-  font-weight: bold;
-  margin-bottom: 5px;
+.add-event-buttons button:hover {
+  background-color: #ffeb3b;
+  color: #333;
 }
 
 .modal {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: fixed;
   z-index: 1;
   left: 0;
   top: 0;
   width: 100%;
   height: 100%;
-  overflow: auto;
-  background-color: rgb(0, 0, 0);
   background-color: rgba(0, 0, 0, 0.4);
 }
 
 .modal-content {
-  background-color: #fefefe;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 80%;
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 15px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  width: 60%; 
+  max-width: 500px; 
+  position: relative;
 }
 
 .close {
   color: #aaa;
-  float: right;
   font-size: 28px;
   font-weight: bold;
+  cursor: pointer;
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  transition: color 0.3s ease;
 }
 
 .close:hover,
 .close:focus {
-  color: black;
-  text-decoration: none;
-  cursor: pointer;
+  color: #333;
 }
 
-label {
-  margin-top: 10px;
-  display: block;
-  font-weight: bold;
+.modal-title {
+  margin-top: 0;
+  color: #007bff;
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
-input,
-textarea {
+.form-group {
+  margin-bottom: 30px; 
+}
+
+.form-control {
   width: 100%;
-  padding: 10px;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  display: inline-block;
+  padding: 15px; 
   border: 1px solid #ccc;
+  border-radius: 8px;
   box-sizing: border-box;
+  font-size: 16px;
+  margin-bottom: 20px;
 }
 
-button {
-  background-color: #007bff;
-  color: #fff;
-  padding: 10px;
+textarea {
+  resize: vertical;
+  height: 100px;
+  padding: 15px; 
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-sizing: border-box;
+  font-size: 16px;
+  margin-bottom: 20px;
+}
+
+.btn {
+  padding: 15px 30px; 
   border: none;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
+  background-color: #4caf50;
+  color: #fff;
 }
 
-button:hover {
-  background-color: #0056b3;
+.btn:hover {
+  background-color: #ffeb3b;
+  color: #333;
 }
+
+.event-section {
+  display: flex;
+  justify-content: space-between;
+}
+
+.event-container {
+  flex-grow: 1;
+  margin-right: 20px;
+}
+
+.timeline-container,
+.deadline-container {
+  margin-top: 5%;
+  border: 1px solid #ddd; 
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  background: #f9f9f9;
+  height: 545px;
+  width: 200px;
+  overflow: auto;
+}
+
+.event-card {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+  background-color: #ffffff;
+}
+
+.timeline {
+  background-color: #e6f7ff; 
+}
+
+.deadline {
+  background-color: #ffe6e6;
+}
+
+.titleko {
+  text-align: center;
+}
+
 </style>
