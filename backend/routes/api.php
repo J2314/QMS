@@ -33,6 +33,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/register', [UserReg::class, 'register']);
 
 Route::post('/login', [UserLogin::class, 'login']);
+    
 
 // Add department
 Route::post('/department', [DepartmentRegistration::class, 'addDepartment']);

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\UserDep;
+use App\Models\User;
 
 class UserReg extends Controller
 {
@@ -15,7 +15,7 @@ class UserReg extends Controller
         ]);
 
 
-        $user = UserDep::create([
+        $user = User::create([
             'email' => $request->email,
             'password' => bcrypt($request->password),
         ]);
