@@ -41,7 +41,7 @@
           <td>{{ index + 1 }}</td>
           <td>{{ upload.file_path }}</td>
           <td>{{ formatDate(upload.created_at) }}</td>
-          <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View PDF</button>
+          <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View</button>
           </td>
         </tr>
       </tbody>
@@ -238,10 +238,11 @@ export default {
   margin-bottom: 30px;
 }
 
-#cusTable {
-  margin-top: 30px;
+#cusTable { 
+  margin-top: -13.5%;
   max-width: 700px;
   margin-left: 250px;
+  overflow: auto;
 }
 
 .table-hover {
@@ -277,7 +278,9 @@ export default {
   border: 1px solid #ccc;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   display: block;
-  width: 600px;
-  height: 600px;
+  width: 800px;
+  height: 700px;
+  margin-left: 5%;
+  margin-top: 5%;
 }
 </style>
