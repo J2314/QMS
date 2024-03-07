@@ -239,8 +239,9 @@ export default {
 }
 
 #cusTable {
-  margin-top: 40px;
+  margin-top: 30px;
   max-width: 700px;
+  margin-left: 250px;
 }
 
 .table-hover {
