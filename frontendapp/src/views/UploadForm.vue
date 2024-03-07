@@ -10,8 +10,7 @@
           </div>
           <div class="form-group">
             <label for="department" class="form-label">Department:</label>
-            <input type="text" id="department" class="form-control" v-model="departmentName" placeholder="Enter department"
-              readonly>
+            <input type="text" id="department" class="form-control" v-model="departmentName" placeholder="Enter department" readonly>
           </div>
           <div class="form-group">
             <label for="file" class="form-label">Choose File:</label>
@@ -27,25 +26,27 @@
       </div>
     </div>
 
-    <table id="cusTable" class="table table-hover">
-      <thead>
-        <tr>
-          <th scope="col">#</th>
-          <th id="filePath" scope="col">File Path</th>
-          <th scope="col">Date Uploaded</th>
-          <th scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(upload, index) in formFiles" :key="index">
-          <td>{{ index + 1 }}</td>
-          <td>{{ upload.file_path }}</td>
-          <td>{{ formatDate(upload.created_at) }}</td>
-          <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div id="cusTable" class="table-wrapper">
+      <table class="table table-hover">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th id="filePath" scope="col">File Path</th>
+            <th scope="col">Date Uploaded</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="(upload, index) in formFiles" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ upload.file_path }}</td>
+            <td>{{ formatDate(upload.created_at) }}</td>
+            <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
 
@@ -117,7 +118,7 @@ export default {
       } catch (error) {
         if (error.response && error.response.status === 422) {
           if (error.response.data.error === 'File with the same name already exists') {
-            alert('A file with the same name already exists.');
+            alert('A file with same name already exists.');
           } else {
             this.error = error.response.data.error || 'Validation error.';
           }
@@ -178,7 +179,7 @@ export default {
 <style scoped>
 .content-wrapper {
   padding: 20px;
-  margin-top: 60px;
+  margin-top: 60px; 
   overflow-y: auto;
   flex: 1;
 }
@@ -239,15 +240,16 @@ export default {
 }
 
 #cusTable { 
-  margin-top: -13.5%;
+  margin-top: -15.5%;
   max-width: 700px;
   margin-left: 250px;
-  overflow: auto;
+  /* overflow: auto;
+  max-height: 20%; */
 }
 
 .table-hover {
   width: 100%;
-  margin-top: 30px;
+  margin-top: 0; 
   border-collapse: collapse;
 }
 
@@ -281,6 +283,15 @@ export default {
   width: 800px;
   height: 700px;
   margin-left: 5%;
-  margin-top: 5%;
+  margin-top: 3%;
 }
+
+.table-wrapper {
+  margin-top: 0; 
+  max-height: 325px;
+  overflow-y: auto;
+}
+
+
+
 </style>
