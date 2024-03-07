@@ -1,24 +1,31 @@
 <template>
   <div class="content-wrapper">
-    <form @submit.prevent="uploadFile" class="add-form">
-      <h1 class="form-title">Upload Form</h1>
-      <div class="form-group">
-        <label for="formName" class="form-label">Form Name:</label>
-        <input type="text" id="formName" class="form-control" v-model="fileName" placeholder="Enter form name" readonly>
+    <div class="row">
+      <div class="col-md-6">
+        <form @submit.prevent="uploadFile" class="add-form">
+          <h1 class="form-title">Upload Form</h1>
+          <div class="form-group">
+            <label for="formName" class="form-label">Form Name:</label>
+            <input type="text" id="formName" class="form-control" v-model="fileName" placeholder="Enter form name" readonly>
+          </div>
+          <div class="form-group">
+            <label for="department" class="form-label">Department:</label>
+            <input type="text" id="department" class="form-control" v-model="departmentName" placeholder="Enter department"
+              readonly>
+          </div>
+          <div class="form-group">
+            <label for="file" class="form-label">Choose File:</label>
+            <input class="form-control form-control-lg me-3" id="formFileLg" type="file" @change="fileSelected" ref="file">
+          </div>
+          <div class="d-flex align-items-center">
+            <button type="submit" class="btn btn-primary btn-lg">Upload</button>
+          </div>
+        </form>
       </div>
-      <div class="form-group">
-        <label for="department" class="form-label">Department:</label>
-        <input type="text" id="department" class="form-control" v-model="departmentName" placeholder="Enter department"
-          readonly>
+      <div class="col-md-6">
+        <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%"></iframe>
       </div>
-      <div class="form-group">
-        <label for="file" class="form-label">Choose File:</label>
-        <input class="form-control form-control-lg me-3" id="formFileLg" type="file" @change="fileSelected" ref="file">
-      </div>
-      <div class="d-flex align-items-center">
-        <button type="submit" class="btn btn-primary btn-lg">Upload</button>
-      </div>
-    </form>
+    </div>
 
     <table id="cusTable" class="table table-hover">
       <thead>
@@ -39,10 +46,7 @@
         </tr>
       </tbody>
     </table>
-    <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%"></iframe>
   </div>
-
-
 </template>
 
 <script>
@@ -236,14 +240,12 @@ export default {
 
 #cusTable {
   margin-top: 40px;
-  margin-left: 13.3%;
   max-width: 700px;
 }
 
 .table-hover {
-  width: 65%;
+  width: 100%;
   margin-top: 30px;
-  margin-left: 18%;
   border-collapse: collapse;
 }
 
@@ -270,13 +272,11 @@ export default {
 }
 
 .pdf-viewer {
-  position: fixed;
+  position: relative;
   border: 1px solid #ccc;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-  margin-top: -29.5%;
-  margin-left: 53%;
   display: block;
-  width: 825px;
+  width: 600px;
   height: 600px;
 }
 </style>
