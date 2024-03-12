@@ -28,7 +28,8 @@ export default {
       return (
         this.$route.name === 'addForm' ||
         this.$route.name === 'addDepartment' ||
-        this.$route.name === 'uploadForm'
+        this.$route.name === 'uploadForm' ||
+        this.$route.name === 'addPolicy' 
       );
     },
   },

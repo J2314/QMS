@@ -9,6 +9,7 @@ import Announcement from '../components/Announcement.vue';
 import Monitoring from '../components/Monitoring.vue';
 import Calendar from '../components/Calendar.vue';
 import UploadForm from '../views/UploadForm.vue'
+import AddPolicy from '../views/AddPolicy.vue'
 
 const routes = [
   {
@@ -65,7 +66,12 @@ const routes = [
         path: '/upload/:formId/:departmentName/:fileName',
         name: 'uploadForm',
         component: UploadForm,
-      }
+      },
+      {
+        path: 'addPolicy', 
+        name: 'addPolicy',
+        component: AddPolicy
+      },
     ]
   }
 ];

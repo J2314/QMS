@@ -4,6 +4,24 @@
       <ul class="list-unstyled">
         <li><router-link to="/dashboard">Dashboard</router-link></li>
         <li>
+          <a href="#" @click="togglePolicy">Policy Documents <span v-if="showPolicy" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
+          <ul v-show="showPolicy" class="list-unstyled">
+            <li><router-link to="/dashboard/addPolicy">+ Add Policy</router-link></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" @click="toggleProcedures">Procedures <span v-if="showProcedures" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
+          <ul v-show="showProcedures" class="list-unstyled">
+            <li><router-link to="/dashboard/addDepartment">+ Add Procedure</router-link></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" @click="toggleInstructions">Work Instructions <span v-if="showInstructions" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
+          <ul v-show="showInstructions" class="list-unstyled">
+            <li><router-link to="/dashboard/addDepartment">+ Add Work Instruction</router-link></li>
+          </ul>
+        </li>
+        <li>
           <a href="#" @click="toggleDepartments">Departments <span v-if="showDepartments" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
           <ul v-show="showDepartments" class="list-unstyled">
             <li><router-link to="/dashboard/addDepartment">+ Add Department</router-link></li>
@@ -13,6 +31,12 @@
           <a href="#" @click="toggleForms">Forms <span v-if="showForms" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
           <ul v-show="showForms" class="list-unstyled">
             <li><router-link to="/dashboard/addForm">+ Add Forms</router-link></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" @click="toggleRecords">Records <span v-if="showRecords" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
+          <ul v-show="showRecords" class="list-unstyled">
+            <li><router-link to="/dashboard/addDepartment">+ Add Record</router-link></li>
           </ul>
         </li>
       </ul>
@@ -29,7 +53,11 @@ export default {
   data() {
     return {
       showDepartments: false,
-      showForms: false 
+      showForms: false,
+      showPolicy: false,
+      showProcedures: false,
+      showInstructions: false,
+      showRecords: false
     };
   },
   methods: {
@@ -41,6 +69,18 @@ export default {
     },
     toggleForms() {
       this.showForms = !this.showForms;
+    },
+    togglePolicy() {
+      this.showPolicy = !this.showPolicy;
+    },
+    toggleProcedures() {
+      this.showProcedures = !this.showProcedures;
+    },
+    toggleInstructions() {
+      this.showInstructions = !this.showInstructions;
+    },
+    toggleRecords() {
+      this.showRecords = !this.showRecords;
     }
   }
 }

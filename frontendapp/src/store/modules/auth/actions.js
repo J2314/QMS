@@ -2,9 +2,6 @@ import SignupValidations from "@/services/SignupValidations";
 import { LOGIN_ACTION, SET_USER_TOKEN_DATA_MUTATION, SIGNUP_ACTION } from "@/store/storeconstants";  
 import Axios from 'axios';
 
-//gagawin dito is about sa token katulad ng ginawa ni pana
-//firebase muna database nito
-
 export default {
     async [LOGIN_ACTION](context, payload) {
         let postData = {
