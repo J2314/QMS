@@ -13,6 +13,7 @@ class Policies extends Model
         'document_type',
         'document_name',
         'file_path',
+        'is_active',
     ];
 }
 

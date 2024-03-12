@@ -16,6 +16,7 @@ return new class extends Migration
             $table->text('document_type');
             $table->string('document_name');
             $table->string('file_path')->nullable();
+            $table->boolean('is_active');
             $table->timestamps();
         });
     }

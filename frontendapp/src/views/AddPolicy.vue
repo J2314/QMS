@@ -1,11 +1,12 @@
 <template>
   <div class="content-wrapper">
     <div class="add-form" style="margin-left: 12%;">
-      <form @submit.prevent="uploadFile">
+      <form @submit.prevent="submitForm">
         <h1 class="form-title">Policy Documents</h1>
         <div class="form-group">
           <label for="documentType" class="form-label">Document Type:</label>
-          <select id="documentType" class="form-control" v-model="selectedType">
+          <select id="documentType" class="form-control" v-model="document_type">
+            <option value="">Select Document Type</option>
             <option value="Quality Policy">Quality Policy</option>
             <option value="Environmental Policy">Environmental Policy</option>
             <option value="Health and Safety Policy">Health and Safety Policy</option>
@@ -13,11 +14,13 @@
         </div>
         <div class="form-group">
           <label for="documentName" class="form-label">Document Name:</label>
-          <input type="text" id="documentName" class="form-control" v-model="documentName" placeholder="Enter document name">
+          <input type="text" id="documentName" class="form-control" v-model="document_name"
+            placeholder="Enter document name">
         </div>
         <div class="form-group">
           <label for="file" class="form-label">Choose File:</label>
-          <input class="form-control form-control-lg me-3" id="formFileLg" type="file" @change="fileSelected" ref="file">
+          <input class="form-control form-control-lg me-3" id="formFileLg" type="file" @change="fileSelected"
+            ref="file">
         </div>
         <div class="d-flex">
           <button type="submit" class="btn btn-primary btn-lg">Upload</button>
@@ -37,23 +40,97 @@
           </tr>
         </thead>
         <tbody>
-          <tr v-for="(upload, index) in formFiles" :key="index">
+          <tr v-for="(policy, index) in policies" :key="index">
             <td>{{ index + 1 }}</td>
-            <td>{{ upload.documentType }}</td>
-            <td>{{ upload.documentName }}</td>
-            <td>{{ upload.filePath }}</td>
-            <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View</button></td>
+            <td>{{ policy.document_type }}</td>
+            <td>{{ policy.document_name }}</td>
+            <td>{{ policy.file_path }}</td>
+            <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(policy.id)">View</button></td>
           </tr>
         </tbody>
       </table>
     </div>
+    
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+
+export default {
+  name: 'AddPolicyPage',
+  data() {
+    return {
+      document_type: '',
+      document_name: '',
+      policies: [],
+    };
+  },
+  methods: {
+    openPdf(polId) {
+      axios.get(`http://127.0.0.1:8000/api/retrieve-policies/${polId}`)
+        .then(response => {
+          const fileContent = response.data.file.file_path;
+          const pdfViewer = this.$refs.pdfViewer;
+          
+          pdfViewer.src = fileContent;
+        })
+        .catch(error => {
+          console.error('Error fetching file content:', error);
+        });
+    },
+    submitForm() {
+      if (!this.document_type || !this.document_name || !this.$refs.file.files[0]) {
+        alert('Please fill out all fields and select a file.');
+        return;
+      }
+
+      let formData = new FormData();
+      formData.append('file', this.$refs.file.files[0]);
+      formData.append('document_type', this.document_type);
+      formData.append('document_name', this.document_name);
+
+      axios.post('http://127.0.0.1:8000/api/upload-policy', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+        .then(response => {
+          if (response.status === 200) {
+            alert('File uploaded successfully.');
+            this.document_type = '';
+            this.document_name = '';
+            this.$refs.file.value = null;
+            this.fetchPolicies(); 
+          } else {
+            alert('Error uploading file.');
+          }
+        })
+        .catch(error => {
+          console.error('Error uploading file:', error);
+          alert('Error uploading file.');
+        });
+    },
+    fetchPolicies() {
+      axios.get('http://127.0.0.1:8000/api/retrieve-policies') 
+        .then(response => {
+          this.policies = response.data; 
+        })
+        .catch(error => {
+          console.error('Error fetching policies:', error);
+        });
+    },
+  },
+  mounted() {
+    this.fetchPolicies();
+  }
+}
+</script>
 
 <style scoped>
 .content-wrapper {
   padding: 20px;
-  margin-top: 60px; 
+  margin-top: 60px;
   overflow-y: auto;
   flex: 1;
 }
@@ -102,7 +179,7 @@
 
 .table-hover {
   width: 100%;
-  margin-top: 0; 
+  margin-top: 0;
   border-collapse: collapse;
 }
 

@@ -10,6 +10,8 @@ use App\Http\Controllers\FormRegistration;
 use App\Http\Controllers\FormRetrieve;
 use App\Http\Controllers\Archive;
 use App\Http\Controllers\FileUpload;
+use App\Http\Controllers\PolicyRetrieve;
+use App\Http\Controllers\PolicyUpload;
 use App\Http\Controllers\ViewPDF;
 
 /*
@@ -60,6 +62,14 @@ Route::middleware('auth.sanctum')->group(function () {
 
   // View PDF
   Route::get('/get-file-content/{fileId}', [ViewPDF::class, 'getFileContent']);
+  Route::get('/retrieve-policies/{polId}', [ViewPDF::class, 'getContentPolicies']);
+
+  // Policies
+  Route::post('/upload-policy', [PolicyUpload::class, 'upload']);
+  Route::get('/retrieve-policies', [PolicyRetrieve::class, 'getPolicies']);
+
+
+
     
 
 
