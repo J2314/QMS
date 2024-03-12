@@ -45,12 +45,13 @@
             <td>{{ policy.document_type }}</td>
             <td>{{ policy.document_name }}</td>
             <td>{{ policy.file_path }}</td>
-            <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(policy.id)">View</button></td>
+            <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(policy.id)">View</button>
+            </td>
           </tr>
         </tbody>
       </table>
     </div>
-    
+
   </div>
 </template>
 
@@ -72,7 +73,7 @@ export default {
         .then(response => {
           const fileContent = response.data.file.file_path;
           const pdfViewer = this.$refs.pdfViewer;
-          
+
           pdfViewer.src = fileContent;
         })
         .catch(error => {
@@ -101,7 +102,7 @@ export default {
             this.document_type = '';
             this.document_name = '';
             this.$refs.file.value = null;
-            this.fetchPolicies(); 
+            this.fetchPolicies();
           } else {
             alert('Error uploading file.');
           }
@@ -112,14 +113,20 @@ export default {
         });
     },
     fetchPolicies() {
-      axios.get('http://127.0.0.1:8000/api/retrieve-policies') 
+      axios.get('http://127.0.0.1:8000/api/retrieve-policies')
         .then(response => {
-          this.policies = response.data; 
+          this.policies = response.data;
         })
         .catch(error => {
           console.error('Error fetching policies:', error);
         });
     },
+  },
+  fileSelected(event) {
+    const files = event.target.files;
+    if (files.length > 0) {
+      this.form.file = files[0];
+    }
   },
   mounted() {
     this.fetchPolicies();
