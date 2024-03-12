@@ -1,208 +1,193 @@
 <template>
-    <div class="content-wrapper">
+  <div class="content-wrapper">
+    <form @submit.prevent="submitForm" class="add-form">
       <h1 class="form-title">Policy Documents</h1>
-      <div class="add-form">
-        <form @submit.prevent="addPolicy('Quality')" class="policy-form">
-          <label for="newQualityPolicyName" class="form-label">New Quality Policy Name:</label>
-          <div class="input-group">
-            <input type="text" id="newQualityPolicyName" class="form-control" v-model="newQualityPolicyName" required>
-            <button type="submit" class="btn btn-primary">Add Quality Policy</button>
-          </div>
-        </form>
-        <form @submit.prevent="addPolicy('Environmental')" class="policy-form">
-          <label for="newEnvironmentalPolicyName" class="form-label">New Environmental Policy Name:</label>
-          <div class="input-group">
-            <input type="text" id="newEnvironmentalPolicyName" class="form-control" v-model="newEnvironmentalPolicyName" required>
-            <button type="submit" class="btn btn-primary">Add Environmental Policy</button>
-          </div>
-        </form>
-        <form @submit.prevent="addPolicy('Health & Safety')" class="policy-form">
-          <label for="newSafetyPolicyName" class="form-label">New Health & Safety Policy Name:</label>
-          <div class="input-group">
-            <input type="text" id="newSafetyPolicyName" class="form-control" v-model="newSafetyPolicyName" required>
-            <button type="submit" class="btn btn-primary">Add Health & Safety Policy</button>
-          </div>
-        </form>
+      <div class="form-table-container">
+        <table class="form-table">
+          <tr>
+            <td>
+              <label for="quality-policy" class="form-label">Quality Policy:</label>
+              <input type="text" id="quality-policy" class="form-control" v-model="qualityPolicy" placeholder="Enter name">
+            </td>
+            <td>
+              <label for="environment-policy" class="form-label">Environment Policy:</label>
+              <input type="text" id="environment-policy" class="form-control" v-model="environmentPolicy" placeholder="Enter code">
+            </td>
+            <td>
+              <label for="health-safety-policy" class="form-label">Health and Safety Policy:</label>
+              <input type="text" id="health-safety-policy" class="form-control" v-model="healthSafetyPolicy" placeholder="Enter code">
+            </td>
+            <td class="button-cell">
+              <button type="submit" class="btn btn-primary">Add</button>
+            </td>
+          </tr>
+        </table>
       </div>
-      <div class="policy-table-container">
-        <ul class="policy-list">
-          <li v-for="policy in policyDocuments" :key="policy.id" class="policy-item">
-            <span class="policy-name">{{ policy.name }}</span>
-            <button @click="deletePolicy(policy.id)" class="btn btn-danger">Delete</button>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </template>
-  
-  <script>
-  import axios from 'axios';
-  
-  export default {
-    name: 'PolicyDocuments',
-    data() {
-      return {
-        newQualityPolicyName: '',
-        newEnvironmentalPolicyName: '',
-        newSafetyPolicyName: '',
-        policyDocuments: []
-      };
-    },
-    methods: {
-      async addPolicy(type) {
-        let policyName = '';
-        switch (type) {
-          case 'Quality':
-            policyName = this.newQualityPolicyName;
-            break;
-          case 'Environmental':
-            policyName = this.newEnvironmentalPolicyName;
-            break;
-          case 'Health & Safety':
-            policyName = this.newSafetyPolicyName;
-            break;
-        }
-  
-        try {
-          const response = await axios.post('http://127.0.0.1:8000/api/policy', {
-            name: policyName,
-            type: type
-          });
-          this.policyDocuments.push(response.data);
-          switch (type) {
-            case 'Quality':
-              this.newQualityPolicyName = '';
-              break;
-            case 'Environmental':
-              this.newEnvironmentalPolicyName = '';
-              break;
-            case 'Health & Safety':
-              this.newSafetyPolicyName = '';
-              break;
-          }
-        } catch (error) {
-          console.error(`Error adding ${type} policy:`, error);
-        }
-      },
-      async deletePolicy(policyId) {
-        try {
-          await axios.delete(`http://127.0.0.1:8000/api/policy/${policyId}`);
-          this.policyDocuments = this.policyDocuments.filter(policy => policy.id !== policyId);
-        } catch (error) {
-          console.error('Error deleting policy:', error);
-        }
-      },
-      async fetchPolicyDocuments() {
-        try {
-          const response = await axios.get('http://127.0.0.1:8000/api/policies');
-          this.policyDocuments = response.data;
-        } catch (error) {
-          console.error('Error fetching policy documents:', error);
-        }
+      <span v-if="submitError" class="error-message">{{ submitError }}</span>
+    </form>
+    <table class="form-summary-table">
+      <thead>
+        <tr>
+          <th>Document Type</th>
+          <th>Document Name</th>
+          <th>Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="(policy, index) in policies" :key="index">
+          <td>{{ policy.type }}</td>
+          <td>{{ policy.name }}</td>
+          <td>
+            <button @click="deletePolicy(index)" class="btn btn-danger">Delete</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</template>
+
+<script>
+
+export default {
+  data() {
+    return {
+      qualityPolicy: '',
+      environmentPolicy: '',
+      healthSafetyPolicy: '',
+      submitError: '',
+      policies: [] 
+    };
+  },
+  methods: {
+    submitForm() {
+      if (!this.qualityPolicy || !this.environmentPolicy || !this.healthSafetyPolicy) {
+        this.submitError = 'Please fill out all fields.';
+        return;
       }
+
+      this.policies.push({ type: 'Quality Policy', name: this.qualityPolicy });
+      this.policies.push({ type: 'Environment Policy', name: this.environmentPolicy });
+      this.policies.push({ type: 'Health and Safety Policy', name: this.healthSafetyPolicy });
+
+      this.qualityPolicy = '';
+      this.environmentPolicy = '';
+      this.healthSafetyPolicy = '';
+      this.submitError = '';
     },
-    mounted() {
-      this.fetchPolicyDocuments();
+    deletePolicy(index) {
+      this.policies.splice(index, 1);
     }
   }
-  </script>
-  
-  <style scoped>
-  .content-wrapper {
-    padding: 20px;
-    margin-top: 60px;
-  }
-  
-  .form-title {
-    margin-left: 15%;
-    font-size: 32px;
-    font-weight: bold;
-    color: #333;
-    margin-bottom: 20px;
-  }
-  
-  .add-form {
-    margin-left: 15%;
-    margin-bottom: 20px;
-  }
-  
-  .policy-form {
-    margin-bottom: 20px;
-  }
-  
-  .form-label {
-    font-size: 18px;
-    color: #333;
-    margin-right: 10px;
-  }
-  
-  .input-group {
-    display: flex;
-    align-items: center;
-  }
-  
-  .form-control {
-    flex: 1;
-    padding: 12px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 16px;
-    margin-right: 10px;
-  }
-  
-  .btn-primary {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 12px 20px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 16px;
-  }
-  
-  .btn-primary:hover {
-    background-color: #0056b3;
-  }
-  
-  .policy-table-container {
-    max-width: 500px;
-  }
-  
-  .policy-list {
-    list-style: none;
-    padding: 0;
-  }
-  
-  .policy-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    margin-bottom: 10px;
-  }
-  
-  .policy-name {
-    flex: 1;
-  }
-  
-  .btn-danger {
-    background-color: gray;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    padding: 8px 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    font-size: 14px;
-  }
-  
-  .btn-danger:hover {
-    background-color: lightgray;
-    color: black;
-  }
-  </style>
-  
+};
+</script>
+
+<style scoped>
+.content-wrapper {
+  padding: 20px;
+  margin-top: 60px;
+}
+
+.add-form {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.form-label {
+  font-size: 18px;
+  color: #333;
+}
+
+.form-control {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.btn-primary {
+  margin-top: 22px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+}
+
+.btn-danger {
+  background-color: gray;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 14px;
+}
+
+.btn-danger:hover {
+  background-color: lightgray;
+  color: black;
+}
+
+.error-message {
+  display: block;
+  margin-top: 12px;
+  font-size: 16px;
+  color: #dc3545;
+}
+
+.form-title {
+  font-size: 32px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 30px;
+}
+
+.form-table-container {
+  overflow-x: auto;
+}
+
+.form-table {
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+.form-table tr {
+  border-bottom: 1px solid #ccc;
+}
+
+.form-table td {
+  padding: 15px;
+}
+
+.button-cell {
+  text-align: right;
+}
+
+.form-summary-table {
+  width: 100%;
+  margin-top: 30px;
+  border-collapse: collapse;
+}
+
+.form-summary-table th,
+.form-summary-table td {
+  border: 1px solid #ccc;
+  padding: 10px;
+  text-align: center;
+}
+
+.form-summary-table th {
+  background-color: #f0f0f0;
+}
+</style>
