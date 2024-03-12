@@ -29,7 +29,8 @@ export default {
         this.$route.name === 'addForm' ||
         this.$route.name === 'addDepartment' ||
         this.$route.name === 'uploadForm' ||
-        this.$route.name === 'addPolicy' 
+        this.$route.name === 'addPolicy' ||
+        this.$route.name === 'addProcedures'
       );
     },
   },

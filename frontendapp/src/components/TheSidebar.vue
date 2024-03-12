@@ -12,7 +12,7 @@
         <li>
           <a href="#" @click="toggleProcedures">Procedures <span v-if="showProcedures" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
           <ul v-show="showProcedures" class="list-unstyled">
-            <li><router-link to="/dashboard/addDepartment">+ Add Procedure</router-link></li>
+            <li><router-link to="/dashboard/addProcedures">+ Add Procedure</router-link></li>
           </ul>
         </li>
         <li>

@@ -10,6 +10,7 @@ import Monitoring from '../components/Monitoring.vue';
 import Calendar from '../components/Calendar.vue';
 import UploadForm from '../views/UploadForm.vue'
 import AddPolicy from '../views/AddPolicy.vue'
+import AddProcedures from '../views/AddProcedures.vue'
 
 const routes = [
   {
@@ -71,6 +72,11 @@ const routes = [
         path: 'addPolicy', 
         name: 'addPolicy',
         component: AddPolicy
+      },
+      {
+        path: 'addProcedures', 
+        name: 'addProcedures',
+        component: AddProcedures
       },
     ]
   }
