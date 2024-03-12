@@ -1,31 +1,40 @@
 <template>
   <div class="content-wrapper">
-    <div class="add-form" style="margin-left: 12%;">
-      <form @submit.prevent="submitForm">
-        <h1 class="form-title">Policy Documents</h1>
-        <div class="form-group">
-          <label for="documentType" class="form-label">Document Type:</label>
-          <select id="documentType" class="form-control" v-model="document_type">
-            <option value="">Select Document Type</option>
-            <option value="Quality Policy">Quality Policy</option>
-            <option value="Environmental Policy">Environmental Policy</option>
-            <option value="Health and Safety Policy">Health and Safety Policy</option>
-          </select>
+    <div class="row">
+      <div class="col-md-6">
+        <div class="add-form">
+          <form @submit.prevent="submitForm">
+            <h1 class="form-title">Policy Documents</h1>
+            <div class="form-group">
+              <label for="documentType" class="form-label">Document Type:</label>
+              <select id="documentType" class="form-control" v-model="document_type">
+                <option value="">Select Document Type</option>
+                <option value="Quality Policy">Quality Policy</option>
+                <option value="Environmental Policy">Environmental Policy</option>
+                <option value="Health and Safety Policy">Health and Safety Policy</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="documentName" class="form-label">Document Name:</label>
+              <input type="text" id="documentName" class="form-control" v-model="document_name"
+                placeholder="Enter document name">
+            </div>
+            <div class="form-group">
+              <label for="file" class="form-label">Choose File:</label>
+              <input class="form-control form-control-lg me-3" id="formFileLg" type="file" @change="fileSelected"
+                ref="file">
+            </div>
+            <div class="d-flex">
+              <button type="submit" class="btn btn-primary btn-lg">Upload</button>
+            </div>
+          </form>
         </div>
-        <div class="form-group">
-          <label for="documentName" class="form-label">Document Name:</label>
-          <input type="text" id="documentName" class="form-control" v-model="document_name"
-            placeholder="Enter document name">
+      </div>
+      <div class="col-md-6">
+        <div class="pdf-viewer-container">
+          <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%" frameborder="0"></iframe>
         </div>
-        <div class="form-group">
-          <label for="file" class="form-label">Choose File:</label>
-          <input class="form-control form-control-lg me-3" id="formFileLg" type="file" @change="fileSelected"
-            ref="file">
-        </div>
-        <div class="d-flex">
-          <button type="submit" class="btn btn-primary btn-lg">Upload</button>
-        </div>
-      </form>
+      </div>
     </div>
 
     <div id="cusTable" class="table-wrapper" style="margin-left: 12%;">
@@ -49,11 +58,6 @@
           </tr>
         </tbody>
       </table>
-    </div>
-    
-    <!-- Add the PDF viewer here -->
-    <div class="pdf-viewer-container">
-      <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%" frameborder="0"></iframe>
     </div>
   </div>
 </template>

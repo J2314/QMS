@@ -240,7 +240,7 @@ export default {
 }
 
 #cusTable { 
-  margin-top: -18.5%;
+  margin-top: -15.5%;
   max-width: 700px;
   margin-left: 250px;
 }
@@ -279,14 +279,14 @@ export default {
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   display: block;
   width: 800px;
-  height: 775px;
+  height: 700px;
   margin-left: 5%;
   margin-top: 3%;
 }
 
 .table-wrapper {
   margin-top: 0; 
-  max-height: 350px;
+  max-height: 325px;
   overflow-y: auto;
 }
 
