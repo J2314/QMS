@@ -243,8 +243,6 @@ export default {
   margin-top: -18.5%;
   max-width: 700px;
   margin-left: 250px;
-  /* overflow: auto;
-  max-height: 20%; */
 }
 
 .table-hover {

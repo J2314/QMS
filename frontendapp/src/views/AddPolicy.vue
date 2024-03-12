@@ -1,94 +1,65 @@
 <template>
   <div class="content-wrapper">
-    <form @submit.prevent="submitForm" class="add-form">
-      <h1 class="form-title">Policy Documents</h1>
-      <div class="form-table-container">
-        <table class="form-table">
+    <div class="add-form" style="margin-left: 12%;">
+      <form @submit.prevent="uploadFile">
+        <h1 class="form-title">Policy Documents</h1>
+        <div class="form-group">
+          <label for="documentType" class="form-label">Document Type:</label>
+          <select id="documentType" class="form-control" v-model="selectedType">
+            <option value="Quality Policy">Quality Policy</option>
+            <option value="Environmental Policy">Environmental Policy</option>
+            <option value="Health and Safety Policy">Health and Safety Policy</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="documentName" class="form-label">Document Name:</label>
+          <input type="text" id="documentName" class="form-control" v-model="documentName" placeholder="Enter document name">
+        </div>
+        <div class="form-group">
+          <label for="file" class="form-label">Choose File:</label>
+          <input class="form-control form-control-lg me-3" id="formFileLg" type="file" @change="fileSelected" ref="file">
+        </div>
+        <div class="d-flex">
+          <button type="submit" class="btn btn-primary btn-lg">Upload</button>
+        </div>
+      </form>
+    </div>
+
+    <div id="cusTable" class="table-wrapper" style="margin-left: 12%;">
+      <table class="table table-hover">
+        <thead>
           <tr>
-            <td>
-              <label for="document-type" class="form-label">Document Type:</label>
-              <select id="document-type" v-model="selectedType" class="form-control">
-                <option value="Quality Policy">Quality Policy</option>
-                <option value="Environment Policy">Environment Policy</option>
-                <option value="Health & Safety Policy">Health & Safety Policy</option>
-              </select>
-            </td>
-            <td>
-              <label for="document-name" class="form-label">Document Name:</label>
-              <input type="text" id="document-name" class="form-control" v-model="documentName" placeholder="Enter name">
-            </td>
-            <td class="button-cell">
-              <button type="submit" class="btn btn-primary">Add</button>
-              <button @click="uploadPolicies" class="btn btn-secondary">Upload</button>
-            </td>
+            <th scope="col">#</th>
+            <th id="documentType" scope="col">Document Type</th>
+            <th id="documentName" scope="col">Document Name</th>
+            <th id="filePath" scope="col">File Path</th>
+            <th id="actions" scope="col">Actions</th>
           </tr>
-        </table>
-      </div>
-      <span v-if="submitError" class="error-message">{{ submitError }}</span>
-    </form>
-    <table class="form-summary-table addDepartments">
-      <thead>
-        <tr>
-          <th>Document Type</th>
-          <th>Document Name</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(policy, index) in policies" :key="index">
-          <td>{{ policy.type }}</td>
-          <td>{{ policy.name }}</td>
-          <td>
-            <button @click="deletePolicy(index)" class="btn btn-danger">Delete</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <tr v-for="(upload, index) in formFiles" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ upload.documentType }}</td>
+            <td>{{ upload.documentName }}</td>
+            <td>{{ upload.filePath }}</td>
+            <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
   </div>
 </template>
-
-<script>
-
-export default {
-  data() {
-    return {
-      selectedType: 'Quality Policy',
-      documentName: '',
-      submitError: '',
-      policies: [] 
-    };
-  },
-  methods: {
-    submitForm() {
-      if (!this.documentName) {
-        this.submitError = 'Please enter the document name.';
-        return;
-      }
-
-      this.policies.push({ type: this.selectedType, name: this.documentName });
-
-      this.documentName = '';
-      this.submitError = '';
-    },
-    deletePolicy(index) {
-      this.policies.splice(index, 1);
-    },
-    uploadPolicies() {
-      // Implement upload logic here
-    }
-  }
-};
-</script>
 
 <style scoped>
 .content-wrapper {
   padding: 20px;
-  margin-top: 60px;
+  margin-top: 60px; 
+  overflow-y: auto;
+  flex: 1;
 }
 
 .add-form {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 700px;
 }
 
 .form-label {
@@ -103,6 +74,8 @@ export default {
   border-radius: 6px;
   font-size: 16px;
   margin-bottom: 10px;
+  max-height: 200px;
+  overflow-y: auto;
 }
 
 .btn-primary {
@@ -115,100 +88,42 @@ export default {
   cursor: pointer;
   transition: background-color 0.3s;
   font-size: 16px;
+  margin-bottom: 20px;
 }
 
 .btn-primary:hover {
   background-color: #0056b3;
 }
 
-.btn-secondary {
-  margin-top: 22px;
-  background-color: #6c757d;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 12px 20px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 16px;
-  margin-left: 10px; /* Added margin for spacing */
+.table-wrapper {
+  margin-top: 20px;
+  max-width: 700px;
 }
 
-.btn-secondary:hover {
-  background-color: #5a6268;
-}
-
-.btn-danger {
-  background-color: gray;
-  color: #fff;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: background-color 0.3s;
-  font-size: 14px;
-}
-
-.btn-danger:hover {
-  background-color: lightgray;
-  color: black;
-}
-
-.error-message {
-  display: block;
-  margin-top: 12px;
-  font-size: 16px;
-  color: #dc3545;
-}
-
-.form-title {
-  font-size: 32px;
-  font-weight: bold;
-  color: #333;
-  margin-bottom: 30px;
-}
-
-.form-table-container {
-  overflow-x: auto;
-}
-
-.form-table {
+.table-hover {
   width: 100%;
-  border-collapse: collapse;
-  border-spacing: 0;
-}
-
-.form-table tr {
-  border-bottom: 1px solid #ccc;
-}
-
-.form-table td {
-  padding: 15px;
-}
-
-.button-cell {
-  text-align: right;
-}
-
-.form-summary-table {
-  width: 100%;
-  margin-top: 30px;
+  margin-top: 0; 
   border-collapse: collapse;
 }
 
-.form-summary-table th,
-.form-summary-table td {
+.table-hover th,
+.table-hover td {
   border: 1px solid #ccc;
   padding: 10px;
   text-align: center;
+  vertical-align: middle;
 }
 
-.form-summary-table th {
+.table-hover th {
   background-color: #f0f0f0;
 }
 
-.addDepartments {
-  margin-left: 15%; 
-  margin-right: 25%;
+.form-control-lg {
+  width: 100%;
+  flex: 1;
+}
+
+.align-items-center {
+  width: 100%;
 }
 </style>
