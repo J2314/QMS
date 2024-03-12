@@ -6,26 +6,27 @@
         <table class="form-table">
           <tr>
             <td>
-              <label for="quality-policy" class="form-label">Quality Policy:</label>
-              <input type="text" id="quality-policy" class="form-control" v-model="qualityPolicy" placeholder="Enter name">
+              <label for="document-type" class="form-label">Document Type:</label>
+              <select id="document-type" v-model="selectedType" class="form-control">
+                <option value="Quality Policy">Quality Policy</option>
+                <option value="Environment Policy">Environment Policy</option>
+                <option value="Health & Safety Policy">Health & Safety Policy</option>
+              </select>
             </td>
             <td>
-              <label for="environment-policy" class="form-label">Environment Policy:</label>
-              <input type="text" id="environment-policy" class="form-control" v-model="environmentPolicy" placeholder="Enter code">
-            </td>
-            <td>
-              <label for="health-safety-policy" class="form-label">Health and Safety Policy:</label>
-              <input type="text" id="health-safety-policy" class="form-control" v-model="healthSafetyPolicy" placeholder="Enter code">
+              <label for="document-name" class="form-label">Document Name:</label>
+              <input type="text" id="document-name" class="form-control" v-model="documentName" placeholder="Enter name">
             </td>
             <td class="button-cell">
               <button type="submit" class="btn btn-primary">Add</button>
+              <button @click="uploadPolicies" class="btn btn-secondary">Upload</button>
             </td>
           </tr>
         </table>
       </div>
       <span v-if="submitError" class="error-message">{{ submitError }}</span>
     </form>
-    <table class="form-summary-table">
+    <table class="form-summary-table addDepartments">
       <thead>
         <tr>
           <th>Document Type</th>
@@ -51,31 +52,29 @@
 export default {
   data() {
     return {
-      qualityPolicy: '',
-      environmentPolicy: '',
-      healthSafetyPolicy: '',
+      selectedType: 'Quality Policy',
+      documentName: '',
       submitError: '',
       policies: [] 
     };
   },
   methods: {
     submitForm() {
-      if (!this.qualityPolicy || !this.environmentPolicy || !this.healthSafetyPolicy) {
-        this.submitError = 'Please fill out all fields.';
+      if (!this.documentName) {
+        this.submitError = 'Please enter the document name.';
         return;
       }
 
-      this.policies.push({ type: 'Quality Policy', name: this.qualityPolicy });
-      this.policies.push({ type: 'Environment Policy', name: this.environmentPolicy });
-      this.policies.push({ type: 'Health and Safety Policy', name: this.healthSafetyPolicy });
+      this.policies.push({ type: this.selectedType, name: this.documentName });
 
-      this.qualityPolicy = '';
-      this.environmentPolicy = '';
-      this.healthSafetyPolicy = '';
+      this.documentName = '';
       this.submitError = '';
     },
     deletePolicy(index) {
       this.policies.splice(index, 1);
+    },
+    uploadPolicies() {
+      // Implement upload logic here
     }
   }
 };
@@ -120,6 +119,23 @@ export default {
 
 .btn-primary:hover {
   background-color: #0056b3;
+}
+
+.btn-secondary {
+  margin-top: 22px;
+  background-color: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 20px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  font-size: 16px;
+  margin-left: 10px; /* Added margin for spacing */
+}
+
+.btn-secondary:hover {
+  background-color: #5a6268;
 }
 
 .btn-danger {
@@ -189,5 +205,10 @@ export default {
 
 .form-summary-table th {
   background-color: #f0f0f0;
+}
+
+.addDepartments {
+  margin-left: 15%; 
+  margin-right: 25%;
 }
 </style>
