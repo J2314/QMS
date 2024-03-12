@@ -20,6 +20,11 @@ export default {
 }
 </script>
 
-<style>
-
-</style>
+ <style>
+/*
+@import "@/assets/scss/gigz.scss";
+@import "@/assets/scss/custom.scss";
+@import url("./assets/plugins/Leaflet/leaflet.css");
+@import url("./assets/plugins/icons/@fortawesome/fontawesome-free/css/all.min.css");
+*/
+</style> 
