@@ -28,6 +28,6 @@ class ViewPDF extends Controller
             return response()->json(['error' => 'File not found'], 404);
         }
 
-        return response(compact('file'), 200);
+        return response(compact('policy'), 200);
     }
 }
