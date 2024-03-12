@@ -51,6 +51,10 @@
       </table>
     </div>
     
+    <!-- Add the PDF viewer here -->
+    <div class="pdf-viewer-container">
+      <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%" frameborder="0"></iframe>
+    </div>
   </div>
 </template>
 
@@ -202,5 +206,19 @@ export default {
 
 .align-items-center {
   width: 100%;
+}
+
+.pdf-viewer-container {
+  margin-left: 12%;
+  margin-top: 20px;
+  width: 800px;
+  height: 500px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.pdf-viewer {
+  width: 100%;
+  height: 100%;
 }
 </style>
