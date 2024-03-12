@@ -151,6 +151,7 @@ export default {
 
 .add-form {
   max-width: 700px;
+  margin-left: 25%;
 }
 
 .form-label {
@@ -179,7 +180,6 @@ export default {
   cursor: pointer;
   transition: background-color 0.3s;
   font-size: 16px;
-  margin-bottom: 20px;
 }
 
 .btn-primary:hover {
@@ -187,7 +187,7 @@ export default {
 }
 
 .table-wrapper {
-  margin-top: 20px;
+  margin-top: -80px;
   max-width: 700px;
 }
 
