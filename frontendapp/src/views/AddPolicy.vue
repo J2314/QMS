@@ -8,7 +8,7 @@
             <div class="form-group">
               <label for="documentType" class="form-label">Document Type:</label>
               <select id="documentType" class="form-control" v-model="document_type">
-                <option value="">Select Document Type</option>
+                <option value="" disabled selected>Select Document Type</option>
                 <option value="Quality Policy">Quality Policy</option>
                 <option value="Environmental Policy">Environmental Policy</option>
                 <option value="Health and Safety Policy">Health and Safety Policy</option>
@@ -29,35 +29,34 @@
             </div>
           </form>
         </div>
+        <div id="cusTable" class="table-wrapper mt-3">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th id="documentType" scope="col">Document Type</th>
+                <th id="documentName" scope="col">Document Name</th>
+                <th id="filePath" scope="col">File Path</th>
+                <th id="actions" scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(policy, index) in policies" :key="index">
+                <td>{{ index + 1 }}</td>
+                <td>{{ policy.document_type }}</td>
+                <td>{{ policy.document_name }}</td>
+                <td>{{ policy.file_path }}</td>
+                <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(policy.id)">View</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="col-md-6">
         <div class="pdf-viewer-container">
-          <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%" frameborder="0"></iframe>
+          <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%"></iframe>
         </div>
       </div>
-    </div>
-
-    <div id="cusTable" class="table-wrapper" style="margin-left: 12%;">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th id="documentType" scope="col">Document Type</th>
-            <th id="documentName" scope="col">Document Name</th>
-            <th id="filePath" scope="col">File Path</th>
-            <th id="actions" scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(policy, index) in policies" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ policy.document_type }}</td>
-            <td>{{ policy.document_name }}</td>
-            <td>{{ policy.file_path }}</td>
-            <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(policy.id)">View</button></td>
-          </tr>
-        </tbody>
-      </table>
     </div>
   </div>
 </template>
@@ -78,7 +77,7 @@ export default {
     openPdf(polId) {
       axios.get(`http://127.0.0.1:8000/api/retrieve-policies/${polId}`)
         .then(response => {
-          const fileContent = response.data.file.file_path;
+          const fileContent = response.data.policy.file_path;
           const pdfViewer = this.$refs.pdfViewer;
 
           pdfViewer.src = fileContent;
@@ -128,12 +127,12 @@ export default {
           console.error('Error fetching policies:', error);
         });
     },
-  },
-  fileSelected(event) {
-    const files = event.target.files;
-    if (files.length > 0) {
-      this.form.file = files[0];
-    }
+    fileSelected(event) {
+      const files = event.target.files;
+      if (files.length > 0) {
+        this.form.file = files[0];
+      }
+    },
   },
   mounted() {
     this.fetchPolicies();
@@ -146,12 +145,12 @@ export default {
   padding: 20px;
   margin-top: 60px;
   overflow-y: auto;
-  flex: 1;
 }
 
 .add-form {
   max-width: 700px;
   margin-left: 25%;
+  margin-right: auto;
 }
 
 .form-label {
@@ -180,6 +179,7 @@ export default {
   cursor: pointer;
   transition: background-color 0.3s;
   font-size: 16px;
+  margin-bottom: 12px;
 }
 
 .btn-primary:hover {
@@ -187,8 +187,9 @@ export default {
 }
 
 .table-wrapper {
-  margin-top: -80px;
   max-width: 700px;
+  margin-left: 25%;
+  margin-right: auto;
 }
 
 .table-hover {
@@ -219,10 +220,11 @@ export default {
 }
 
 .pdf-viewer-container {
-  margin-left: 12%;
   margin-top: 20px;
+  margin-left: auto;
+  margin-right: auto;
   width: 800px;
-  height: 500px;
+  height: 800px;
   border: 1px solid #ccc;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
 }

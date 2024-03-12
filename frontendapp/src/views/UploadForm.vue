@@ -20,35 +20,36 @@
             <button type="submit" class="btn btn-primary btn-lg">Upload</button>
           </div>
         </form>
+
+        <div id="cusTable" class="table-wrapper">
+          <table class="table table-hover">
+            <thead>
+              <tr>
+                <th scope="col">#</th>
+                <th id="filePath" scope="col">File Path</th>
+                <th scope="col">Date Uploaded</th>
+                <th scope="col">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="(upload, index) in formFiles" :key="index">
+                <td>{{ index + 1 }}</td>
+                <td>{{ upload.file_path }}</td>
+                <td>{{ formatDate(upload.created_at) }}</td>
+                <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </div>
       <div class="col-md-6">
         <iframe id="pdfViewer" class="pdf-viewer" ref="pdfViewer" height="100%"></iframe>
       </div>
     </div>
-
-    <div id="cusTable" class="table-wrapper">
-      <table class="table table-hover">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th id="filePath" scope="col">File Path</th>
-            <th scope="col">Date Uploaded</th>
-            <th scope="col">Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(upload, index) in formFiles" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ upload.file_path }}</td>
-            <td>{{ formatDate(upload.created_at) }}</td>
-            <td><button id="btnView" type="button" class="btn btn-secondary" @click="openPdf(upload.id)">View</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
   </div>
 </template>
+
 
 <script>
 import axios from 'axios';
@@ -179,14 +180,15 @@ export default {
 <style scoped>
 .content-wrapper {
   padding: 20px;
-  margin-top: 60px; 
+  margin-top: 60px;
   overflow-y: auto;
   flex: 1;
 }
 
 .add-form {
   max-width: 700px;
-  margin-left: 250px;
+  margin-left: 23%;
+  margin-right: auto;
 }
 
 .form-label {
@@ -239,15 +241,16 @@ export default {
   margin-bottom: 30px;
 }
 
-#cusTable { 
-  margin-top: -15.5%;
+#cusTable {
+  margin-top: 20px;
   max-width: 700px;
-  margin-left: 250px;
+  margin-left: 23%;
+  margin-right: auto;
 }
 
 .table-hover {
   width: 100%;
-  margin-top: 0; 
+  margin-top: 0;
   border-collapse: collapse;
 }
 
@@ -278,18 +281,14 @@ export default {
   border: 1px solid #ccc;
   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
   display: block;
-  width: 800px;
+  width: 100%;
   height: 700px;
-  margin-left: 5%;
-  margin-top: 3%;
+  margin-top: 20px;
 }
 
 .table-wrapper {
-  margin-top: 0; 
+  margin-top: 20px;
   max-height: 325px;
   overflow-y: auto;
 }
-
-
-
 </style>
