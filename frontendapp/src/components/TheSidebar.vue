@@ -1,46 +1,90 @@
 <template>
-    <div>
-      <div class="sidebar">
-        <ul class="list-unstyled">
-          <li><router-link to="/dashboard">Dashboard</router-link></li>
-          <li><router-link to="/general">General</router-link></li>
-          <li>
-            <a href="#" @click="toggleDepartments">Departments <span v-if="showDepartments" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
-            <ul v-show="showDepartments" class="list-unstyled">
-              <li><router-link to="/it-department">IT Department</router-link></li>
-              <li><router-link to="/accounting-department">Accounting Department</router-link></li>
-              <li><router-link to="/registrar-office">Registrar's Office</router-link></li>
-              <li><router-link to="/school-director">School Director's Office</router-link></li>
-              <li><router-link to="/academic-heads">Academic Heads</router-link></li>
-              <li><router-link to="/faculty">Faculty</router-link></li>
-            </ul>
-          </li>
-        </ul>
-      </div>
-      <div class="logout-section">
-        <a href="#" @click="logout">Logout</a>
-      </div>
+  <div>
+    <div class="sidebar">
+      <ul class="list-unstyled">
+        <li><router-link to="/dashboard">Dashboard</router-link></li>
+        <li>
+          <a href="#" @click="togglePolicy">Policy Documents <span v-if="showPolicy" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
+          <ul v-show="showPolicy" class="list-unstyled">
+            <li><router-link to="/dashboard/addPolicy">+ Add Policy</router-link></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" @click="toggleProcedures">Procedures <span v-if="showProcedures" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
+          <ul v-show="showProcedures" class="list-unstyled">
+            <li><router-link to="/dashboard/addProcedures">+ Add Procedure</router-link></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" @click="toggleInstructions">Work Instructions <span v-if="showInstructions" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
+          <ul v-show="showInstructions" class="list-unstyled">
+            <li><router-link to="/dashboard/addDepartment">+ Add Work Instruction</router-link></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" @click="toggleDepartments">Departments <span v-if="showDepartments" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
+          <ul v-show="showDepartments" class="list-unstyled">
+            <li><router-link to="/dashboard/addDepartment">+ Add Department</router-link></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" @click="toggleForms">Forms <span v-if="showForms" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
+          <ul v-show="showForms" class="list-unstyled">
+            <li><router-link to="/dashboard/addForm">+ Add Forms</router-link></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#" @click="toggleRecords">Records <span v-if="showRecords" class="arrow">▲</span><span v-else class="arrow">▼</span></a>
+          <ul v-show="showRecords" class="list-unstyled">
+            <li><router-link to="/dashboard/addDepartment">+ Add Record</router-link></li>
+          </ul>
+        </li>
+      </ul>
     </div>
-  </template>
-  
-  <script>
-  export default {
-    name: "DashboardPage",
-    data() {
-      return {
-        showDepartments: false
-      };
+    <div class="logout-section">
+      <a href="#" @click="logout">Logout</a>
+    </div>
+  </div>
+</template>
+
+<script>
+export default {
+  name: "DashboardPage",
+  data() {
+    return {
+      showDepartments: false,
+      showForms: false,
+      showPolicy: false,
+      showProcedures: false,
+      showInstructions: false,
+      showRecords: false
+    };
+  },
+  methods: {
+    logout() {
+      this.$router.push({ name: 'Login' }); 
     },
-    methods: {
-      logout() {
-        this.$router.push({ name: 'Login' }); 
-      },
-      toggleDepartments() {
-        this.showDepartments = !this.showDepartments;
-      }
+    toggleDepartments() {
+      this.showDepartments = !this.showDepartments;
+    },
+    toggleForms() {
+      this.showForms = !this.showForms;
+    },
+    togglePolicy() {
+      this.showPolicy = !this.showPolicy;
+    },
+    toggleProcedures() {
+      this.showProcedures = !this.showProcedures;
+    },
+    toggleInstructions() {
+      this.showInstructions = !this.showInstructions;
+    },
+    toggleRecords() {
+      this.showRecords = !this.showRecords;
     }
   }
-  </script>
+}
+</script>
   
   <style scoped>
   .sidebar {

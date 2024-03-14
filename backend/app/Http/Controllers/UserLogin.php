@@ -3,7 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\UserDep;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth; 
 
 class UserLogin extends Controller
 {
@@ -11,17 +12,18 @@ class UserLogin extends Controller
     {
         $credentials = $request->only('email', 'password');
 
-        $user = UserDep::where('email', $credentials['email'])->first();
-
-        if (!$user) {
+        if (!Auth::attempt($credentials)) {
             return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
-        if (password_verify($credentials['password'], $user->password)) {
+        $user = User::where('email', $credentials['email'])->first();
 
-            return response()->json(['message' => 'Login successful'], 200);
+        if (!$user || !password_verify($credentials['password'], $user->password)) {
+            return response()->json(['error' => 'Invalid credentials'], 401);
         }
 
-        return response()->json(['error' => 'Invalid credentials'], 401);
+        $token = $user->createToken('myapptoken')->plainTextToken;
+
+        return response()->json(['message' => 'Login successful', 'token' => $token], 200);
     }
 }

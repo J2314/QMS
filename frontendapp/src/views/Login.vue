@@ -34,7 +34,7 @@
   </div>
 </template>
 
-  
+
 <script>
 import { mapMutations } from 'vuex';
 import SignupValidations from '../services/SignupValidations';
@@ -67,11 +67,13 @@ export default {
       }
       this.error = '';
       this.showLoading(true);
+      const data = {
+        email: this.email,
+        password: this.password
+      }
+      console.log(data)
       try {
-        await axios.post('http://127.0.0.1:8000/api/login', {
-          email: this.email,
-          password: this.password,
-        });
+        await axios.post('http://127.0.0.1:8000/api/login', data);
         this.$router.push('/dashboard');
       } catch (error) {
         if (error.response && error.response.data && error.response.data.message) {

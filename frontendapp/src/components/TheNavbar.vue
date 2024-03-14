@@ -1,5 +1,5 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-green">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-green fixed-top">
     <a class="navbar-brand" href="#">
       <img src="../assets/bma.png" alt="BMA Logo" class="navbar-logo mr-2">
       <span class="brand-text">Baliuag Maritime Academy</span>
