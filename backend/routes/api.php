@@ -31,8 +31,6 @@ use App\Http\Controllers\ViewPDF;
 
 Route::post('/register', [UserReg::class, 'register']);
 Route::post('/login', [UserLogin::class, 'login']);
-<<<<<<< HEAD
-=======
 
 // Protected routes (authentication required)
 Route::middleware('auth.sanctum')->group(function () {
@@ -71,10 +69,3 @@ Route::middleware('auth.sanctum')->group(function () {
   Route::get('/retrieve-policies', [PolicyRetrieve::class, 'getPolicies']);
 
 
-
-    
-
-
-
-
->>>>>>> 2680f2ddc4aacd87d81d43f940451c40b1ed7ea4
