@@ -247,7 +247,7 @@ export default {
   margin-left: 23%;
   margin-right: auto;
 }
-
+  
 .table-hover {
   width: 100%;
   margin-top: 0;
