@@ -69,9 +69,3 @@ Route::middleware('auth.sanctum')->group(function () {
   Route::get('/retrieve-policies', [PolicyRetrieve::class, 'getPolicies']);
 
 
-
-    
-
-
-
-

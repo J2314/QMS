@@ -1,0 +1,13 @@
+{
+  "name": "qms",
+  "version": "1.0.0",
+  "description": "npm install",
+  "main": "index.js",
+  "scripts": {
+    "serve": "npm run serve",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
