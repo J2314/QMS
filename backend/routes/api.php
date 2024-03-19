@@ -13,6 +13,7 @@ use App\Http\Controllers\FileUpload;
 use App\Http\Controllers\PolicyRetrieve;
 use App\Http\Controllers\PolicyUpload;
 use App\Http\Controllers\ViewPDF;
+use App\Http\Controllers\Statistics;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,8 +36,6 @@ Route::post('/login', [UserLogin::class, 'login']);
 // Protected routes (authentication required)
 Route::middleware('auth.sanctum')->group(function () {
   
-});
-
   // Add department
   Route::post('/department', [DepartmentRegistration::class, 'addDepartment']);
 
@@ -67,5 +66,9 @@ Route::middleware('auth.sanctum')->group(function () {
   // Policies
   Route::post('/upload-policy', [PolicyUpload::class, 'upload']);
   Route::get('/retrieve-policies', [PolicyRetrieve::class, 'getPolicies']);
+
+  //Statistics
+  Route::post('/statistics/record-form-view', [Statistics::class, 'recordFormView']);
+});
 
 
