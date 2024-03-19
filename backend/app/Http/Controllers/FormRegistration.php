@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Forms;
+use Illuminate\Support\Facades\Auth;
 
 class FormRegistration extends Controller
 {
@@ -15,25 +16,32 @@ class FormRegistration extends Controller
             'description' => 'required|string',
             'department_id' => 'required|numeric|exists:departments,id',
         ]);
-    
+
         $existingForm = Forms::where('file_name', $validatedData['file_name'])
-                              ->orWhere('file_code', $validatedData['file_code'])
-                              ->first();
-    
+            ->orWhere('file_code', $validatedData['file_code'])
+            ->first();
+
         if ($existingForm) {
             return response()->json(['message' => 'A form with the same file name or file code already exists'], 400);
         }
-    
+
         $formData = new Forms();
         $formData->file_name = $validatedData['file_name'];
         $formData->file_code = $validatedData['file_code'];
         $formData->description = $validatedData['description'];
         $formData->department_id = $validatedData['department_id'];
-        $formData->is_removed = false; 
+        $formData->is_removed = false;
         $formData->save();
+
+        $_data = Auth::guard('api')->user();
+        return response(
+            [
+                'user' => $_data
+            ],
+            200
+        );
         
         return response()->json(['message' => 'Form submitted successfully'], 201);
-    }
-    
-}
 
+    }
+}

@@ -9,6 +9,7 @@ use App\Http\Controllers\DepartmentRetrieve;
 use App\Http\Controllers\FormRegistration;
 use App\Http\Controllers\FormRetrieve;
 use App\Http\Controllers\Archive;
+use App\Http\Controllers\AutheticationController;
 use App\Http\Controllers\FileUpload;
 use App\Http\Controllers\PolicyRetrieve;
 use App\Http\Controllers\PolicyUpload;
@@ -30,11 +31,11 @@ use App\Http\Controllers\Statistics;
 //     return $request->user();
 // });
 
-Route::post('/register', [UserReg::class, 'register']);
-Route::post('/login', [UserLogin::class, 'login']);
+Route::post('/register', [AutheticationController::class, 'register']);
+Route::post('/login', [AutheticationController::class, 'login']);
 
 // Protected routes (authentication required)
-Route::middleware('auth.sanctum')->group(function () {
+Route::group(['middleware' => ['auth:sanctum']], function () {
   
   // Add department
   Route::post('/department', [DepartmentRegistration::class, 'addDepartment']);
@@ -71,4 +72,6 @@ Route::middleware('auth.sanctum')->group(function () {
   Route::post('/statistics/record-form-view', [Statistics::class, 'recordFormView']);
 });
 
-
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+  return $request->user();
+});
