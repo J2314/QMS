@@ -33,13 +33,13 @@ class FormRegistration extends Controller
         $formData->is_removed = false;
         $formData->save();
 
-        $_data = Auth::guard('api')->user();
-        return response(
-            [
-                'user' => $_data
-            ],
-            200
-        );
+        // $_data = Auth::guard('api')->user();
+        // return response(
+        //     [
+        //         'user' => $_data
+        //     ],
+        //     200
+        // );
         
         return response()->json(['message' => 'Form submitted successfully'], 201);
 

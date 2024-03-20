@@ -13,26 +13,28 @@ class Statistics extends Controller
     public function recordFormView(Request $request)
     {
         try {
-            // Log request headers for debugging
-            Log::debug('Request Headers:', $request->headers->all());
-
-            $formId = $request->input('form_id');
-            $user = Auth::guard('api')->user();
-            $user = User::find($user->id);
-            return response(compact('user'), 200);
-            /*  if ($user) {
+            if (Auth::guard('sanctum')->check()) {
+                $user = Auth::guard('sanctum')->user();
+                
                 $userId = $user->id;
+                
+                $formId = $request->input('form_id');
+                
+                if (!$formId) {
+                    return response()->json(['error' => 'Form ID is required'], 400);
+                }
 
-                FormViewing::create([
-                    'form_id' => $formId,
-                    'user_id' => $userId,
-                ]);
+                $formViewing = new FormViewing();
+                $formViewing->user_id = $userId;
+                $formViewing->form_id = $formId;
+                $formViewing->save();
 
-                return response()->json(['message' => 'Form view recorded successfully']);
+                return response()->json(['message' => 'Form viewing recorded successfully', 'form_viewing' => $formViewing], 200);
             } else {
                 return response()->json(['error' => 'User not authenticated'], 401);
-            } */
+            }
         } catch (\Exception $e) {
+            Log::error('Failed to record form view', ['error' => $e->getMessage()]);
             return response()->json(['error' => $e->getMessage()], 500);
         }
     }
