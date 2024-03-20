@@ -13,4 +13,9 @@ class FormViewing extends Model
         'form_id',
         'user_id',
     ];
+
+    public function form()
+    {
+        return $this->belongsTo(Forms::class, 'form_id', 'id');
+    }
 }

@@ -31,4 +31,9 @@ class Forms extends Model
     {
         return $this->hasOne(FormFiles::class, 'form_id');
     }
+
+    function form_viewing()
+    {
+        return $this->hasMany(FormViewing::class, 'form_id');
+    }
 }
