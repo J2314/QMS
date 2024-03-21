@@ -149,8 +149,7 @@ export default {
 
 .add-form {
   max-width: 700px;
-  margin-left: 25%;
-  margin-right: auto;
+  margin-left: 5%;
 }
 
 .form-label {
